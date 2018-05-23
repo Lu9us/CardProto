@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CardProto.System;
+using CardProto.System.UI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 using Util;
 namespace CardProto
 {
@@ -10,14 +13,17 @@ namespace CardProto
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
+        DataMapManager manager = new DataMapManager();
         SpriteBatch spriteBatch;
         NetworkInterface n;
+        NetworkUpdatableString s;
         string testings;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             n = new NetworkInterface();
+            s = new NetworkUpdatableString(manager, "GameState");
             n.ConnectToServer();
         }
 
@@ -62,11 +68,12 @@ namespace CardProto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            s.Reset();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             byte[] data = new byte [32000];
             n.main.Receive(data);
-            testings = Util.Serilizer.Desrilize<string>(data);
+            manager.ReciveRaw(data);
 
             // TODO: Add your update logic here
 
@@ -81,7 +88,11 @@ namespace CardProto
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Content.Load<SpriteFont>("Font\\Console"), testings, new Vector2(22, 22), Color.Black);
+            Renderer.data.Sort(Renderer.SortByLayer);
+            foreach (Renderable r in Renderer.data.Where(a=>a.draw))
+            {
+                r.Render(spriteBatch, Content);
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 

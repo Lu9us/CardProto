@@ -29,16 +29,20 @@ namespace Server
                         gs.players[i] = new GameLib.Server.Player();
                         gs.players[i].playerID = i;
                         gs.players[i].Client = networkInterface.clients[i];
-                        networkInterface.clients[i].Send(Util.Serilizer.Serilize<string>("Connected"));
+                       
                     }
                     gameRunning = true;
                 }
 
                 if(gameRunning)
                 {
+                    
                     foreach(Player p in gs.players)
                     {
-                        p.Client.Send(Util.Serilizer.Serilize<string>("Running +" + frameCount));
+                        gs.dataManager.CreateNewMap();  
+                        gs.dataManager.getCurrentMap().AddData("GameState:Frame", "Running +" + frameCount);
+                        gs.dataManager.getCurrentMap().AddData("GameState:PlayerID", "Player: +" + p.playerID);
+                        gs.dataManager.SendData(p.Client);
                         Console.Clear();
                         Console.WriteLine("Running +" + frameCount);
 

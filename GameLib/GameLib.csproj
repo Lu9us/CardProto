@@ -49,5 +49,11 @@
   <ItemGroup>
     <Folder Include="Client\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{f86bf1ee-b0a2-4bab-960c-70c174e148f5}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
