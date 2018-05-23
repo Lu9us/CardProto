@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using Util;
 namespace CardProto
 {
     /// <summary>
@@ -11,11 +11,14 @@ namespace CardProto
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        NetworkInterface n;
+        string testings;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            n = new NetworkInterface();
+            n.ConnectToServer();
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace CardProto
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+           
             // TODO: use this.Content to load your game content here
         }
 
@@ -61,6 +64,9 @@ namespace CardProto
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            byte[] data = new byte [32000];
+            n.main.Receive(data);
+            testings = Util.Serilizer.Desrilize<string>(data);
 
             // TODO: Add your update logic here
 
@@ -74,7 +80,9 @@ namespace CardProto
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            spriteBatch.Begin();
+            spriteBatch.DrawString(Content.Load<SpriteFont>("Font\\Console"), testings, new Vector2(22, 22), Color.Black);
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
