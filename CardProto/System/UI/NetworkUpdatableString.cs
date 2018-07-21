@@ -26,7 +26,7 @@ namespace CardProto.System.UI
             foreach (string sd in data)
             {
                 batch.DrawString(cm.Load<SpriteFont>( "Font\\Console"), sd, new Microsoft.Xna.Framework.Vector2(x, y + i + 5), Color.Black);
-                i +=10;
+                i +=15;
             }
         }
 

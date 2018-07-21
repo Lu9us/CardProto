@@ -18,7 +18,11 @@ namespace Util
             try
             {
                 Packet pdata = Serilizer.Desrilize<Packet>(data);
-                ReciveData(Serilizer.Desrilize<DataMap>(pdata.data));
+                DataMap dmap = Serilizer.Desrilize<DataMap>(pdata.data);
+                dmap.AddData("GameState:PSize", pdata.length);
+                dmap.AddData("GameState:Packet", "PacketSize: " + data.Length);
+                dmap.AddData("GameState:FreePacket","PacketFree: "+( data.Length - pdata.length));
+                ReciveData(dmap);
             }
             catch (Exception e)
             {
