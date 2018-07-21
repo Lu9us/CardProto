@@ -1,10 +1,18 @@
-﻿using CardProto.System;
+
+using CardProto.System;
 using CardProto.System.UI;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Linq;
+using System.Speech.Synthesis;
+using System;
+
 using Util;
+using GameLib.Server.Services.ServiceLoader;
+using GameLib.Server.Services;
+
 namespace CardProto
 {
     /// <summary>
@@ -12,16 +20,21 @@ namespace CardProto
     /// </summary>
     public class Game1 : Game
     {
+        
         GraphicsDeviceManager graphics;
         DataMapManager manager = new DataMapManager();
         SpriteBatch spriteBatch;
         NetworkInterface n;
+
         NetworkUpdatableString s;
+
         string testings;
+     
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            ServiceController.setRuntime(Runtime.CLIENT);
             n = new NetworkInterface();
             s = new NetworkUpdatableString(manager, "GameState");
             n.ConnectToServer();
@@ -38,6 +51,7 @@ namespace CardProto
             // TODO: Add your initialization logic here
 
             base.Initialize();
+         
         }
 
         /// <summary>
@@ -46,9 +60,11 @@ namespace CardProto
         /// </summary>
         protected override void LoadContent()
         {
+            Random r = new Random();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
            
+    
             // TODO: use this.Content to load your game content here
         }
 
@@ -73,7 +89,9 @@ namespace CardProto
                 Exit();
             byte[] data = new byte [32000];
             n.main.Receive(data);
+
             manager.ReciveRaw(data);
+
 
             // TODO: Add your update logic here
 

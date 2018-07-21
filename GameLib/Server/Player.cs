@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GameLib.DataStructures;
+using GameLib.DataStructures.Implementations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -12,5 +14,6 @@ namespace GameLib.Server
         public int playerID;
         public Socket Client;
         public string Name;
+        public IExtendedVarTable varTable = new HashVarTable();
     }
 }
