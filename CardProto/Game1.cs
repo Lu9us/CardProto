@@ -1,9 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+
+using CardProto.System;
+using CardProto.System.UI;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Speech.Synthesis;
 using System;
+
 using Util;
 using GameLib.Server.Services.ServiceLoader;
 using GameLib.Server.Services;
@@ -17,9 +22,12 @@ namespace CardProto
     {
         
         GraphicsDeviceManager graphics;
+        DataMapManager manager = new DataMapManager();
         SpriteBatch spriteBatch;
         NetworkInterface n;
-        int frame = 0;
+
+        NetworkUpdatableString s;
+
         string testings;
      
         public Game1()
@@ -28,6 +36,7 @@ namespace CardProto
             Content.RootDirectory = "Content";
             ServiceController.setRuntime(Runtime.CLIENT);
             n = new NetworkInterface();
+            s = new NetworkUpdatableString(manager, "GameState");
             n.ConnectToServer();
         }
 
@@ -75,13 +84,15 @@ namespace CardProto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            s.Reset();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             byte[] data = new byte [32000];
             n.main.Receive(data);
-            testings = Util.Serilizer.Desrilize<string>(data);
-            frame++;
-      
+
+            manager.ReciveRaw(data);
+
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -95,7 +106,11 @@ namespace CardProto
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Content.Load<SpriteFont>("Font\\Console"), testings, new Vector2(22, 22), Color.Black);
+            Renderer.data.Sort(Renderer.SortByLayer);
+            foreach (Renderable r in Renderer.data.Where(a=>a.draw))
+            {
+                r.Render(spriteBatch, Content);
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 

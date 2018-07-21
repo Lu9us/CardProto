@@ -39,23 +39,23 @@ namespace Server
                         gs.players[i] = new GameLib.Server.Player();
                         gs.players[i].playerID = i;
                         gs.players[i].Client = networkInterface.clients[i];
-                        networkInterface.clients[i].Send(Util.Serilizer.Serilize<string>("Connected"));
+                       
                     }
                     gs.gameRunning = true;
                 }
 
                 if(gs.gameRunning)
                 {
-
+     
                     foreach(Player p in gs.players)
                     {
-                        if (p != null)
-                        {
-                            p.Client.Send(Util.Serilizer.Serilize<string>("Running +" + frameCount));
-                            Console.Clear();
-                            Console.WriteLine("Running +" + frameCount);
-                        }
-                        
+                        gs.dataManager.CreateNewMap();  
+                        gs.dataManager.getCurrentMap().AddData("GameState:Frame", "Running +" + frameCount);
+                        gs.dataManager.getCurrentMap().AddData("GameState:PlayerID", "Player: +" + p.playerID);
+                        gs.dataManager.SendData(p.Client);
+                        Console.Clear();
+                        Console.WriteLine("Running +" + frameCount);
+
 
                     }
                     ServiceController.RunServices();
