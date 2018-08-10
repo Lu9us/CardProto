@@ -5,24 +5,25 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using Util.Interfaces;
 
 namespace Util
 {
-  public static class Serilizer
+  public  class Serilizer: ISerizilizer
     {
 
-        public static byte[] Serilize<T>(T data)
+        public byte[] Serilize<T>(T data)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 BinaryFormatter b = new BinaryFormatter();
                 b.Serialize(ms, data);
-                return ms.GetBuffer();
+                return ms.ToArray();
 
             }
 
         }
-        public static T Desrilize<T>(byte [] data)
+        public  T DeSerilize<T>(byte [] data)
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -33,11 +34,41 @@ namespace Util
                     BinaryFormatter b = new BinaryFormatter();
                     return (T)b.Deserialize(ms);
                 }
-                catch
+                catch(Exception e)
                 {
-                    return default(T);
+                    throw e;
+                 
                 }
             }
+        }
+
+        public T DeSerilize<T>(byte[] data,int size)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                try
+                {
+                    ms.Write(data, 0, data.Length);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    BinaryFormatter b = new BinaryFormatter();
+                    return (T)b.Deserialize(ms);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+
+                }
+            }
+        }
+
+        public string SerilizeString<T>(T data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T DeSerilize<T>(string data)
+        {
+            throw new NotImplementedException();
         }
 
     }

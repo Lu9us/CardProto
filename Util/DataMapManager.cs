@@ -1,24 +1,63 @@
-﻿using System;
+﻿using log4net;
+using log4net.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Util.Interfaces;
 
 namespace Util
 {
    public class DataMapManager
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DataMapManager));
+        private ISerizilizer serizilizer = new Serilizer();
         private DataMap currentMap = new DataMap();
         private DataMap LastRecivedMap;
         private List<KeyValuePair<string, DataInterface>> clients = new List<KeyValuePair<string, DataInterface>>();
 
-        public void ReciveRaw(byte[] data)
+        public DataMapManager()
+        {
+            BasicConfigurator.Configure();
+            log.Info("DataMapManager started");
+        }
+
+        public void ReciveRaw(byte[] data,int size)
         {
             try
             {
-                Packet pdata = Serilizer.Desrilize<Packet>(data);
-                DataMap dmap = Serilizer.Desrilize<DataMap>(pdata.data);
+                log.Debug("Receiving data ");
+                string logS = "";
+                int i = 0;
+                int zeroCount = 0;
+                foreach (byte by in data)
+                {
+                    if (by == 0)
+                    {
+                        zeroCount++;
+                    }
+                    else
+                    {
+                        zeroCount = 0;
+                    }
+                    if (zeroCount > 6)
+                    {
+                        break;
+                    }
+                    logS += by.ToString("X2");
+                    i++;
+                    if (i == 10)
+                    {
+                        logS += Environment.NewLine;
+                        i = 0;
+                    }
+
+                }
+                log.Debug(logS);
+                Packet pdata = serizilizer.DeSerilize<Packet>(data);
+                DataMap dmap = serizilizer.DeSerilize<DataMap>(pdata.data);
                 dmap.AddData("GameState:PSize", pdata.length);
                 dmap.AddData("GameState:Packet", "PacketSize: " + data.Length);
                 dmap.AddData("GameState:FreePacket","PacketFree: "+( data.Length - pdata.length));
@@ -28,6 +67,8 @@ namespace Util
             {
                 LastRecivedMap.AddData("GameState:Exception", e.Message);
                 ReciveData(LastRecivedMap);
+                log.Error(e);
+                log.Error(e.StackTrace);
 
             }
 
@@ -58,10 +99,10 @@ namespace Util
         public void SendData(Socket s)
         {
             Packet p = new Packet();
-            p.data = Serilizer.Serilize<DataMap>(currentMap);
+            p.data = serizilizer.Serilize<DataMap>(currentMap);
             p.length = p.data.Length;
 
-        s.Send(Serilizer.Serilize<Packet>(p));
+        s.Send(serizilizer.Serilize<Packet>(p));
 
         }
 

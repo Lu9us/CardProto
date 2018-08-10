@@ -21,12 +21,19 @@ namespace CardProto.System.UI
 
         public override void Render(SpriteBatch batch,ContentManager cm)
         {
-           string [] data =  val.Split('|');
-            int i = 0;
-            foreach (string sd in data)
+            try
             {
-                batch.DrawString(cm.Load<SpriteFont>( "Font\\Console"), sd, new Microsoft.Xna.Framework.Vector2(x, y + i + 5), Color.Black);
-                i +=15;
+                string[] data = val.Split('|');
+                int i = 0;
+                foreach (string sd in data)
+                {
+                    batch.DrawString(cm.Load<SpriteFont>("Font\\Console"), sd, new Microsoft.Xna.Framework.Vector2(x, y + i + 5), Color.Black);
+                    i += 15;
+                }
+            }
+            catch (Exception e)
+            {
+                batch.DrawString(cm.Load<SpriteFont>("Font\\Console"), "Rendering failed for "+ToString(), new Microsoft.Xna.Framework.Vector2(x, y),Color.Red);
             }
         }
 

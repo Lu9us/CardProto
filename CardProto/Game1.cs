@@ -12,6 +12,8 @@ using System;
 using Util;
 using GameLib.Server.Services.ServiceLoader;
 using GameLib.Server.Services;
+using System.IO;
+using GameLib.Server;
 
 namespace CardProto
 {
@@ -25,16 +27,20 @@ namespace CardProto
         DataMapManager manager = new DataMapManager();
         SpriteBatch spriteBatch;
         NetworkInterface n;
-
+        FileStream fs;
+        StreamWriter sw;
         NetworkUpdatableString s;
 
-        string testings;
+      
      
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             ServiceController.setRuntime(Runtime.CLIENT);
+            ServiceController.LoadGameState(new GameState());
+            ServiceLoader.ModuleHook();
+            ServiceLoader.ClassHook();
             n = new NetworkInterface();
             s = new NetworkUpdatableString(manager, "GameState");
             n.ConnectToServer();
@@ -51,7 +57,10 @@ namespace CardProto
             // TODO: Add your initialization logic here
 
             base.Initialize();
-         
+            fs = new FileStream("LOG"+DateTime.Now.ToString("hhmmddMMyyyy")+ ".txt", FileMode.OpenOrCreate);
+            sw = new StreamWriter(fs);
+            Console.SetOut(sw);
+            
         }
 
         /// <summary>
@@ -87,12 +96,17 @@ namespace CardProto
             s.Reset();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            byte[] data = new byte [32000];
-            n.main.Receive(data);
+            int overallSize = 0;
+            int size = 0;
+           
+            byte[] data = new byte [52000];
+           
 
-            manager.ReciveRaw(data);
-
-
+                size = n.main.Receive(data,0);
+          
+            manager.ReciveRaw(data, size);
+            manager.CreateNewMap();
+            manager.SendData(n.main);
             // TODO: Add your update logic here
 
             base.Update(gameTime);

@@ -26,7 +26,7 @@ namespace GameLib.Server.Services
         {
             systemRuntime = rt;
         }
-        public static void getRuntime()
+        public static Runtime getRuntime()
         {
             return systemRuntime;
         }

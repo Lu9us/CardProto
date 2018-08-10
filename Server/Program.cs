@@ -49,12 +49,17 @@ namespace Server
      
                     foreach(Player p in gs.players)
                     {
+                        if(p != null)
+                        { 
                         gs.dataManager.CreateNewMap();  
-                        gs.dataManager.getCurrentMap().AddData("GameState:Frame", "Running +" + frameCount);
+                        gs.dataManager.getCurrentMap().AddData("GameState:Frame", "Running +" + gs.FrameCount);
                         gs.dataManager.getCurrentMap().AddData("GameState:PlayerID", "Player: +" + p.playerID);
                         gs.dataManager.SendData(p.Client);
-                        Console.Clear();
-                        Console.WriteLine("Running +" + frameCount);
+                        byte[] data = new byte[52000];
+                        p.Client.Receive(data);
+                        gs.dataManager.ReciveRaw(data, data.Length);
+
+                       }
 
 
                     }

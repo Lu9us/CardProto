@@ -30,6 +30,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,9 +69,13 @@
     <Compile Include="Server\Services\ServiceController.cs" />
     <Compile Include="Server\Services\ServiceLoader\ServiceLoader.cs" />
     <Compile Include="Server\WorldState.cs" />
+    <Compile Include="Unified\Services\MapService\MapService.cs" />
+    <Compile Include="Unified\Services\MapService\Tile\Tile.cs" />
+    <Compile Include="Unified\Services\MapService\Tile\TileMap.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\" />
+    <Folder Include="Client\Services\" />
+    <Folder Include="Unified\Services\MapService\Chunk\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Util\Util.csproj">

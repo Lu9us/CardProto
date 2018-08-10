@@ -35,33 +35,7 @@ namespace Util
     
         }
 
-        private void ReciveCallback(IAsyncResult ar)
-        {
-            StateObject state = (StateObject)ar.AsyncState;
-            Socket client = state.client;
-            int bytesRead = client.EndReceive(ar);
-            if (bytesRead > 0)
-            {
-                client.BeginReceive(state.data, 0, state.bufferSize, 0, ReciveCallback, state);
-            }
-            else
-            {
-                if (state.EntirePacket.Length > 0)
-                {
-
-                }
-            }
-        }
-       
-        public void Recive()
-        {
-            if (main != null)
-            {
-              
-            }
-      
-
-        }
+ 
         public void SetBuffer(int var)
         {
             networkBuffer = new byte[var];

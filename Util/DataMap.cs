@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,10 @@ namespace Util
     [Serializable]
    public class DataMap
     {
-       internal List<string> keys = new List<string>();
-       internal List<object> data = new List<object>();
+        [JsonProperty()]
+        internal List<string> keys = new List<string>();
+        [JsonProperty()]
+        internal List<object> data = new List<object>();
 
         public void AddData(string key, object value)
         {
