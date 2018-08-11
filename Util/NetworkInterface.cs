@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Util
@@ -62,13 +63,21 @@ f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Address;
         }
         public void ConnectToServer()
         {
-             main = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            string local = Dns.GetHostEntry(Dns.GetHostName())
-     .AddressList.First(
-         f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-     .ToString();
-            main.Connect(local, 3000);
+            try
+            {
+                main = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                string local = Dns.GetHostEntry(Dns.GetHostName())
+         .AddressList.First(
+             f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+         .ToString();
+                main.Connect(local, 3000);
+            }
+            catch
+            {
+                Thread.Sleep(1000);
+                ConnectToServer();
 
+            }
 
         }
     }

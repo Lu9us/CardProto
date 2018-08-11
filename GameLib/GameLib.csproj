@@ -49,6 +49,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Client\Services\MapRenderer.cs" />
+    <Compile Include="Client\System\GraphicsHandler\RenderCallHelper.cs" />
+    <Compile Include="Client\System\GraphicsHandler\TextureAlias.cs" />
+    <Compile Include="Client\System\GraphicsHandler\TextureAtlas.cs" />
+    <Compile Include="Client\System\Renderable.cs" />
+    <Compile Include="Client\System\Renderer.cs" />
     <Compile Include="DataStructures\Implementations\HashVarTable.cs" />
     <Compile Include="DataStructures\Interface\IExtendedVarible.cs" />
     <Compile Include="DataStructures\Interface\IService.cs" />
@@ -69,12 +79,18 @@
     <Compile Include="Server\Services\ServiceController.cs" />
     <Compile Include="Server\Services\ServiceLoader\ServiceLoader.cs" />
     <Compile Include="Server\WorldState.cs" />
+    <Compile Include="Unified\GameObject\GameObject.cs" />
+    <Compile Include="Unified\GameObject\GameObjectRenderer.cs" />
+    <Compile Include="Unified\GameObject\GameObjectService.cs" />
+    <Compile Include="Unified\GameObject\GameObjectTemplate.cs" />
+    <Compile Include="Unified\GameObject\PlayerService.cs" />
     <Compile Include="Unified\Services\MapService\MapService.cs" />
+    <Compile Include="Unified\Services\MapService\ProceduralMap\MapGenerator.cs" />
     <Compile Include="Unified\Services\MapService\Tile\Tile.cs" />
     <Compile Include="Unified\Services\MapService\Tile\TileMap.cs" />
+    <Compile Include="Unified\Services\PlayerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\Services\" />
     <Folder Include="Unified\Services\MapService\Chunk\" />
   </ItemGroup>
   <ItemGroup>

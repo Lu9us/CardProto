@@ -15,5 +15,6 @@ namespace GameLib.Server
         public Socket Client;
         public string Name;
         public IExtendedVarTable varTable = new HashVarTable();
+        public Guid playerGOID;
     }
 }

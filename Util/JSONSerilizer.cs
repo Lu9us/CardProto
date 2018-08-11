@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Util.Interfaces;
 using Newtonsoft.Json;
+using System.IO;
+using System.Net.Sockets;
 
 namespace Util
 {
@@ -17,9 +19,11 @@ namespace Util
             return JsonConvert.DeserializeObject<T>(sData);
         }
 
+
+
         public T DeSerilize<T>(string data)
         {
-            throw new NotImplementedException();
+            return JsonConvert.DeserializeObject<T>(data);
         }
 
         public byte[] Serilize<T>(T data)
@@ -28,10 +32,12 @@ namespace Util
             return Encoding.ASCII.GetBytes(sdata);
         }
 
+
+
+
         public string SerilizeString<T>(T data)
         {
-          
-            throw new NotImplementedException();
+           return JsonConvert.SerializeObject(data);
         }
     }
 }

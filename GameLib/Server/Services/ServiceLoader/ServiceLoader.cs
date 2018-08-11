@@ -58,7 +58,8 @@ namespace GameLib.Server.Services.ServiceLoader
                 System.Console.WriteLine("Module file path: "+s);
                 try
                 {
-                    var assembly = Assembly.LoadFile(s);
+                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, s);
+                    var assembly = Assembly.LoadFile(path);
                     foreach (Type t in assembly.ExportedTypes)
                     {
                         System.Console.WriteLine("Reading type :" + t.AssemblyQualifiedName);

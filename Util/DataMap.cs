@@ -17,6 +17,9 @@ namespace Util
         internal List<string> keys = new List<string>();
         [JsonProperty()]
         internal List<object> data = new List<object>();
+        [JsonProperty()]
+        internal List<string> typeNames = new List<string>();
+
 
         public void AddData(string key, object value)
         {
@@ -24,6 +27,7 @@ namespace Util
             {
                 keys.Add(key);
                 data.Add(value);
+                typeNames.Add(value.GetType().FullName);
             }
             else
             {

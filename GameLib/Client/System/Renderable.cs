@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using GameLib.Client.System.GraphicsHandler;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace CardProto.System
         public int y;
         public int layer;
         public bool draw;
-        public abstract void Render(SpriteBatch batch,ContentManager cm);
+        public abstract void Render(TextureAtlas atlas, SpriteBatch batch,RenderCallHelper helper);
         public void Dispose()
         {
             Renderer.data.Remove(this);

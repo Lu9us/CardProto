@@ -14,6 +14,7 @@ using GameLib.Server.Services.ServiceLoader;
 using GameLib.Server.Services;
 using System.IO;
 using GameLib.Server;
+using GameLib.Client.System.GraphicsHandler;
 
 namespace CardProto
 {
@@ -30,20 +31,24 @@ namespace CardProto
         FileStream fs;
         StreamWriter sw;
         NetworkUpdatableString s;
+        RenderCallHelper helper;
+        TextureAtlas textureAtlas;
+        GameState gs;
 
-      
-     
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            gs = new GameState();
+            Player player = new Player();
+            gs.players.Add(player);
             Content.RootDirectory = "Content";
-            ServiceController.setRuntime(Runtime.CLIENT);
-            ServiceController.LoadGameState(new GameState());
-            ServiceLoader.ModuleHook();
-            ServiceLoader.ClassHook();
+            ServiceController.setRuntime(Runtime.HYBRID);
+            ServiceController.LoadGameState(gs);
+           
             n = new NetworkInterface();
             s = new NetworkUpdatableString(manager, "GameState");
-            n.ConnectToServer();
+            
         }
 
         /// <summary>
@@ -69,11 +74,17 @@ namespace CardProto
         /// </summary>
         protected override void LoadContent()
         {
+            
+            gs.dataManager.CreateNewMap();
             Random r = new Random();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-           
-    
+            textureAtlas = new TextureAtlas(Content);
+            helper = new RenderCallHelper(spriteBatch, textureAtlas);
+            Renderer.LoadRenderingAliases("rendering.alias", textureAtlas);
+            ServiceLoader.ClassHook();
+            ServiceLoader.ModuleHook();
+            //  gs.dataManager.SendData(n.main);
             // TODO: use this.Content to load your game content here
         }
 
@@ -93,21 +104,19 @@ namespace CardProto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            gs.dataManager.CreateNewMap();
             s.Reset();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+
+            gs.dataManager.getCurrentMap().AddData("input:keyboard", Keyboard.GetState().GetPressedKeys());
             int overallSize = 0;
             int size = 0;
            
-            byte[] data = new byte [52000];
-           
-
-                size = n.main.Receive(data,0);
           
-            manager.ReciveRaw(data, size);
-            manager.CreateNewMap();
-            manager.SendData(n.main);
-            // TODO: Add your update logic here
+
+
+
+            ServiceController.RunServices();
+            gs.dataManager.ReciveData(gs.dataManager.getCurrentMap());
 
             base.Update(gameTime);
         }
@@ -120,10 +129,10 @@ namespace CardProto
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            Renderer.data.Sort(Renderer.SortByLayer);
+            Renderer.data = Renderer.data.OrderBy(a=>a.layer).ToList();
             foreach (Renderable r in Renderer.data.Where(a=>a.draw))
             {
-                r.Render(spriteBatch, Content);
+                r.Render(textureAtlas,spriteBatch,helper);
             }
             spriteBatch.End();
             // TODO: Add your drawing code here

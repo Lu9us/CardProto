@@ -8,18 +8,19 @@ using Microsoft.Xna;
 using Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using GameLib.Client.System.GraphicsHandler;
 
 namespace CardProto.System.UI
 {
     public class NetworkUpdatableString : UIRenderable,Util.DataInterface
     {
-        string val = "";
+        string val = "|end data";
         public NetworkUpdatableString(DataMapManager mg,string tag)
         {
             mg.AddClient(tag,this);
         }
 
-        public override void Render(SpriteBatch batch,ContentManager cm)
+        public override void Render(TextureAtlas atlas,SpriteBatch batch,RenderCallHelper helper)
         {
             try
             {
@@ -27,19 +28,19 @@ namespace CardProto.System.UI
                 int i = 0;
                 foreach (string sd in data)
                 {
-                    batch.DrawString(cm.Load<SpriteFont>("Font\\Console"), sd, new Microsoft.Xna.Framework.Vector2(x, y + i + 5), Color.Black);
+                    batch.DrawString(atlas.GetFont("Font\\Console"), sd, new Microsoft.Xna.Framework.Vector2(x, y + i + 5), Color.Black);
                     i += 15;
                 }
             }
             catch (Exception e)
             {
-                batch.DrawString(cm.Load<SpriteFont>("Font\\Console"), "Rendering failed for "+ToString(), new Microsoft.Xna.Framework.Vector2(x, y),Color.Red);
+                batch.DrawString(atlas.GetFont("Font\\Console"), "Rendering failed for "+ToString(), new Microsoft.Xna.Framework.Vector2(x, y),Color.Red);
             }
         }
 
         public void Reset()
         {
-            val = "";
+            val +="\n";
         }
         public void Update(object data, DataMap source)
         {

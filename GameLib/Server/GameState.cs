@@ -13,7 +13,7 @@ namespace GameLib.Server
     {
 
         public DataMapManager dataManager = new DataMapManager();
-        public Player[] players = new Player[2];
+        public List<Player> players = new List<Player>();
         public bool gameRunning = false;
         public WorldState world = new WorldState();
         public int FrameCount;

@@ -16,7 +16,7 @@ namespace Server
         static void Main(string[] args)
         {
             int frameCount = 0;
-            
+      
             NetworkInterface networkInterface = new NetworkInterface();
             GameLib.Server.GameState gs = new GameLib.Server.GameState();
             ServiceController.LoadGameState(gs);
@@ -33,13 +33,13 @@ namespace Server
                     
                 if (networkInterface.clients.Count > 0 && !gs.gameRunning )
                 {
-                   
+                    
                     for (int i = 0; i < networkInterface.clients.Count;i++)
                     {
                         gs.players[i] = new GameLib.Server.Player();
                         gs.players[i].playerID = i;
                         gs.players[i].Client = networkInterface.clients[i];
-                       
+
                     }
                     gs.gameRunning = true;
                 }
@@ -54,12 +54,12 @@ namespace Server
                         gs.dataManager.CreateNewMap();  
                         gs.dataManager.getCurrentMap().AddData("GameState:Frame", "Running +" + gs.FrameCount);
                         gs.dataManager.getCurrentMap().AddData("GameState:PlayerID", "Player: +" + p.playerID);
-                        gs.dataManager.SendData(p.Client);
                         byte[] data = new byte[52000];
-                        p.Client.Receive(data);
-                        gs.dataManager.ReciveRaw(data, data.Length);
+                      
+                        gs.dataManager.ReciveRaw(p.Client);
+                        gs.dataManager.SendData(p.Client);
 
-                       }
+                        }
 
 
                     }

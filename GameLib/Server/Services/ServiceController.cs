@@ -10,11 +10,12 @@ namespace GameLib.Server.Services
     public enum Runtime
     {
         CLIENT,
-        SERVER
+        SERVER,
+        HYBRID
     }
    public static class ServiceController
     {
-        internal static readonly Dictionary<string, IService> runningServices = new Dictionary<string, IService>();
+        public static readonly Dictionary<string, IService> runningServices = new Dictionary<string, IService>();
         private static GameState gameState;
         private static Runtime systemRuntime;
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameLib.Unified.Services.MapService
 {
+    [Serializable]
    public class Tile
     {
         public int ID;

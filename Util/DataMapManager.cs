@@ -1,7 +1,9 @@
 ﻿using log4net;
 using log4net.Config;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -13,7 +15,7 @@ namespace Util
    public class DataMapManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DataMapManager));
-        private ISerizilizer serizilizer = new Serilizer();
+        private ISerizilizer serizilizer = new JSONSerilizer();
         private DataMap currentMap = new DataMap();
         private DataMap LastRecivedMap;
         private List<KeyValuePair<string, DataInterface>> clients = new List<KeyValuePair<string, DataInterface>>();
@@ -24,47 +26,72 @@ namespace Util
             log.Info("DataMapManager started");
         }
 
-        public void ReciveRaw(byte[] data,int size)
+        public void ReciveRaw(Socket s)
         {
             try
             {
                 log.Debug("Receiving data ");
-                string logS = "";
-                int i = 0;
-                int zeroCount = 0;
-                foreach (byte by in data)
-                {
-                    if (by == 0)
-                    {
-                        zeroCount++;
-                    }
-                    else
-                    {
-                        zeroCount = 0;
-                    }
-                    if (zeroCount > 6)
-                    {
-                        break;
-                    }
-                    logS += by.ToString("X2");
-                    i++;
-                    if (i == 10)
-                    {
-                        logS += Environment.NewLine;
-                        i = 0;
-                    }
+                //  string logS = "";
+                //  int i = 0;
+                //  int zeroCount = 0;
+                //  foreach (byte by in data)
+                //  {
+                //      if (by == 0)
+                //      {
+                //          zeroCount++;
+                //      }
+                //      else
+                //      {
+                //          zeroCount = 0;
+                //      }
+                //      if (zeroCount > 6)
+                //      {
+                //          break;
+                //      }
+                //      logS += by.ToString("X2");
+                //      i++;
+                //      if (i == 10)
+                //      {
+                //          logS += Environment.NewLine;
+                //          i = 0;
+                //      }
+                //
+                //  }
 
+                NetworkStream networkStream = new NetworkStream(s);
+                StreamReader sr = new StreamReader(networkStream);
+               // Packet pdata = serizilizer.DeSerilize<Packet>(data);
+                DataMap dmap = serizilizer.DeSerilize<DataMap>(sr.ReadLine());
+                // dmap.AddData("GameState:PSize", pdata.length);
+                
+               for(int i =0;i<dmap.data.Count;i++)
+                {
+             
+                    if (dmap.data[i] is JToken)
+                    {
+                        dmap.data[i] = ((JToken)dmap.data[i]).ToObject(Type.GetType(dmap.typeNames[i]));
+                    }
+                    if(dmap.data[i] is JObject)
+                    {
+                        dmap.data[i] = ((JObject)dmap.data[i]).ToObject(Type.GetType(dmap.typeNames[i]));
+                    }
+                    if (dmap.data[i] is JArray)
+                    {
+                        dmap.data[i] = ((JArray)dmap.data[i]).ToObject(Type.GetType(dmap.typeNames[i]));
+                    }
+                    i++;
                 }
-                log.Debug(logS);
-                Packet pdata = serizilizer.DeSerilize<Packet>(data);
-                DataMap dmap = serizilizer.DeSerilize<DataMap>(pdata.data);
-                dmap.AddData("GameState:PSize", pdata.length);
-                dmap.AddData("GameState:Packet", "PacketSize: " + data.Length);
-                dmap.AddData("GameState:FreePacket","PacketFree: "+( data.Length - pdata.length));
+
+                dmap.AddData("GameState:Packet", 0);//+ data.Length);
+                //dmap.AddData("GameState:FreePacket","PacketFree: "+( data.Length));
                 ReciveData(dmap);
             }
             catch (Exception e)
             {
+                if (LastRecivedMap == null)
+                {
+                    LastRecivedMap = new DataMap();
+                }
                 LastRecivedMap.AddData("GameState:Exception", e.Message);
                 ReciveData(LastRecivedMap);
                 log.Error(e);
@@ -98,12 +125,13 @@ namespace Util
         }
         public void SendData(Socket s)
         {
-            Packet p = new Packet();
-            p.data = serizilizer.Serilize<DataMap>(currentMap);
-            p.length = p.data.Length;
-
-        s.Send(serizilizer.Serilize<Packet>(p));
-
+            // Packet p = new Packet();
+            // p.data = serizilizer.Serilize<DataMap>(currentMap);
+            // p.length = p.data.Length;
+            NetworkStream stream = new NetworkStream(s);
+            StreamWriter sw = new StreamWriter(stream);
+            sw.WriteLine(serizilizer.SerilizeString<DataMap>(currentMap));
+            sw.Flush();
         }
 
         public void AddClient(string tag, DataInterface client)

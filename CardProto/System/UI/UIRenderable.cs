@@ -10,7 +10,7 @@ namespace CardProto.System.UI
     {
         public UIRenderable()
         {
-            layer = -1;
+            layer = 50;
         }
     }
 }
