@@ -25,10 +25,12 @@ namespace LD42
         {
             if (rs != null)
             {
+        
                 if (rs.getScore() >= 1)
                 {
                     if (!crops.Any(cs => cs.location == c.location))
                     {
+                        gs.soundEffects.playSound("SoundEffects/shoveling");
                         rs.DecreasePoints(1, "Plated Crop");
                         crops.Add(c);
                     }

@@ -65,11 +65,12 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Client\Services\MapRenderer.cs" />
-    <Compile Include="Client\System\GraphicsHandler\RenderCallHelper.cs" />
-    <Compile Include="Client\System\GraphicsHandler\TextureAlias.cs" />
-    <Compile Include="Client\System\GraphicsHandler\TextureAtlas.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\RenderCallHelper.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\TextureAlias.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\TextureAtlas.cs" />
     <Compile Include="Client\System\Renderable.cs" />
     <Compile Include="Client\System\Renderer.cs" />
+    <Compile Include="Client\System\SoundHandlers\SoundEffectStore.cs" />
     <Compile Include="Client\UI\Label.cs" />
     <Compile Include="Client\UI\NetworkUpdatableString.cs" />
     <Compile Include="Client\UI\UIRenderable.cs" />

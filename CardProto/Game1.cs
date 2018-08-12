@@ -81,6 +81,7 @@ namespace CardProto
             spriteBatch = new SpriteBatch(GraphicsDevice);
             textureAtlas = new TextureAtlas(Content);
             helper = new RenderCallHelper(spriteBatch, textureAtlas);
+            gs.soundEffects = new GameLib.Client.System.SoundHandlers.SoundEffectAtlas(Content);
             Renderer.LoadRenderingAliases("rendering.alias", textureAtlas);
             ServiceLoader.ClassHook();
             ServiceLoader.ModuleHook();

@@ -1,4 +1,5 @@
-﻿using GameLib.DataStructures;
+﻿using GameLib.Client.System.SoundHandlers;
+using GameLib.DataStructures;
 using GameLib.DataStructures.Implementations;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace GameLib.Server
     {
 
         public DataMapManager dataManager = new DataMapManager();
+        public SoundEffectAtlas soundEffects;
         public List<Player> players = new List<Player>();
         public bool gameRunning = false;
         public WorldState world = new WorldState();

@@ -20,6 +20,7 @@ namespace LD42
         Label label;
         Label developer;
         Label score;
+        GameState gs;
         public void OnClose()
         {
             
@@ -27,6 +28,7 @@ namespace LD42
 
         public void GameOver()
         {
+            gs.soundEffects.playSound("SoundEffects/death");
             label = new Label(new Microsoft.Xna.Framework.Vector2(250,200));
             label.Update("GAME OVER");
             developer = new Label(new Microsoft.Xna.Framework.Vector2(150, 220));
@@ -47,7 +49,7 @@ namespace LD42
 
         public void OnStart(GameState s)
         {
-           
+            gs = s;
         }
 
         public void OnUpdate()

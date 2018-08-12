@@ -72,32 +72,36 @@ namespace LD42.Services
                 GameObject playerGo = service.GetGameObject(player.playerGOID);
                 Vector2 facing = MovementService.globalFacingToVector[(int)player.varTable.GetItem<Facing>("facing")];
                 Vector2 pos = playerGo.pos + facing;
-                if (thisState.Contains(Keys.X) && !lastState.Contains(Keys.X))
+                if (pos.X >= 0 && pos.Y >= 0 && pos.Y < weather.rainMap.GetLength(0) && pos.Y < weather.rainMap.GetLength(1))
                 {
-                    Drain d = new Drain();
-                    d.position = pos;
-                    improvements.CreateImprovement(d);
-                }
-                if (thisState.Contains(Keys.Z) && !lastState.Contains(Keys.Z))
-                {
-                    Heater d = new Heater();
-                    d.position = pos;
-                    improvements.CreateImprovement(d);
-                }
-                if (thisState.Contains(Keys.C) && !lastState.Contains(Keys.C))
-                {
-                    Aqufier d = new Aqufier();
-                    d.position = pos;
-                    improvements.CreateImprovement(d);
 
-                }
-                if (thisState.Contains(Keys.V) && !lastState.Contains(Keys.V))
-                {
-                    Crops.Crop c = new Crops.Crop();
-                    c.location = pos;
-                    c.state = Crops.State.Growing;
-                    crops.AddCrop(c);
+                    if (thisState.Contains(Keys.X) && !lastState.Contains(Keys.X))
+                    {
+                        Drain d = new Drain();
+                        d.position = pos;
+                        improvements.CreateImprovement(d);
+                    }
+                    if (thisState.Contains(Keys.Z) && !lastState.Contains(Keys.Z))
+                    {
+                        Heater d = new Heater();
+                        d.position = pos;
+                        improvements.CreateImprovement(d);
+                    }
+                    if (thisState.Contains(Keys.C) && !lastState.Contains(Keys.C))
+                    {
+                        Aqufier d = new Aqufier();
+                        d.position = pos;
+                        improvements.CreateImprovement(d);
 
+                    }
+                    if (thisState.Contains(Keys.V) && !lastState.Contains(Keys.V))
+                    {
+                        Crops.Crop c = new Crops.Crop();
+                        c.location = pos;
+                        c.state = Crops.State.Growing;
+                        crops.AddCrop(c);
+
+                    }
                 }
             }
             catch (Exception e)
