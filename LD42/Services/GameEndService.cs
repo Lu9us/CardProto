@@ -31,8 +31,6 @@ namespace LD42
             gs.soundEffects.playSound("SoundEffects/death");
             label = new Label(new Microsoft.Xna.Framework.Vector2(250,200));
             label.Update("GAME OVER");
-            developer = new Label(new Microsoft.Xna.Framework.Vector2(150, 220));
-            developer.Update("Developed by Anthony Emberson");
             score = new Label(new Microsoft.Xna.Framework.Vector2(170, 240));
             score.Update("Score: "+resourceService.getScore());
             GameLib.Server.Services.ServiceController.runningServices.Remove(typeof(InteractionService).FullName);
