@@ -1,6 +1,6 @@
-#Readme 
+# Readme 
 
-##Welcome to climate change chaos 
+## Welcome to climate change chaos 
 ## your objective plant as many crops as you can before the rising water levels claim the land.
 
 the controls are simple: 
@@ -12,8 +12,10 @@ Z creates a heater heating the adjacent tiles
 
 crops can't grow where there is too little water and too much water will destroy crops
 
-Everything has a score :
-Crop : - 1 +2 score for crops that suvive an aditional -1 if they die 
+Everything has a score 
+
+Crop  -1 +2 score for crops that suvive an aditional -1 if they die 
+
 aquifier/drain/heater -25
 
 
