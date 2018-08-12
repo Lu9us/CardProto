@@ -30,7 +30,29 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,12 +64,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Client\Services\MapRenderer.cs" />
+    <Compile Include="Client\System\Camera.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\RenderCallHelper.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\TextureAlias.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\TextureAtlas.cs" />
+    <Compile Include="Client\System\Renderable.cs" />
+    <Compile Include="Client\System\Renderer.cs" />
+    <Compile Include="Client\System\SoundHandlers\SoundEffectStore.cs" />
+    <Compile Include="Client\UI\Label.cs" />
+    <Compile Include="Client\UI\NetworkUpdatableString.cs" />
+    <Compile Include="Client\UI\UIRenderable.cs" />
+    <Compile Include="DataStructures\Implementations\HashVarTable.cs" />
+    <Compile Include="DataStructures\Interface\IExtendedVarible.cs" />
+    <Compile Include="DataStructures\Interface\IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\GameState.cs" />
     <Compile Include="Server\Player.cs" />
+    <Compile Include="Server\Services\ServiceController.cs" />
+    <Compile Include="Server\Services\ServiceLoader\ServiceLoader.cs" />
+    <Compile Include="Server\WorldState.cs" />
+    <Compile Include="Unified\GameObject\GameObject.cs" />
+    <Compile Include="Unified\GameObject\GameObjectRenderer.cs" />
+    <Compile Include="Unified\GameObject\GameObjectService.cs" />
+    <Compile Include="Unified\GameObject\GameObjectTemplate.cs" />
+    <Compile Include="Unified\Services\MapService\MapService.cs" />
+    <Compile Include="Unified\Services\MapService\ProceduralMap\MapGenerator.cs" />
+    <Compile Include="Unified\Services\MapService\Tile\Tile.cs" />
+    <Compile Include="Unified\Services\MapService\Tile\TileMap.cs" />
+    <Compile Include="Unified\Services\PlayerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\" />
+    <Folder Include="Unified\Services\MapService\Chunk\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{f86bf1ee-b0a2-4bab-960c-70c174e148f5}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

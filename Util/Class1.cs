@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Util
 {
-    public interface ISocketUpdateable
+    public interface DataInterface
     {
-        void Update(Packet data);
+        void Update(object data, DataMap source);
     }
 }

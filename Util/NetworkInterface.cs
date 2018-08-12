@@ -1,20 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Util
 {
+    public class StateObject
+    {
+        public StateObject(int bufferSize,Socket clientSocket)
+        {
+            this.bufferSize = bufferSize;
+            data = new byte[bufferSize];
+            client = clientSocket;
+        }
+        public readonly int bufferSize;
+        public byte[] data;
+        public Socket client;
+        public MemoryStream EntirePacket = new MemoryStream();
+
+    }
     public class NetworkInterface
     {
+
+
        public Socket main;
-       public List<Socket> clients = new List<Socket>();
+        public List<Socket> clients = new List<Socket>();
+        private byte[] networkBuffer;
         public NetworkInterface()
         {
     
+        }
+
+ 
+        public void SetBuffer(int var)
+        {
+            networkBuffer = new byte[var];
         }
         public void Accept(IAsyncResult result)
         {
@@ -38,13 +63,21 @@ f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Address;
         }
         public void ConnectToServer()
         {
-             main = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            string local = Dns.GetHostEntry(Dns.GetHostName())
-     .AddressList.First(
-         f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-     .ToString();
-            main.Connect(local, 3000);
+            try
+            {
+                main = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                string local = Dns.GetHostEntry(Dns.GetHostName())
+         .AddressList.First(
+             f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+         .ToString();
+                main.Connect(local, 3000);
+            }
+            catch
+            {
+                Thread.Sleep(1000);
+                ConnectToServer();
 
+            }
 
         }
     }

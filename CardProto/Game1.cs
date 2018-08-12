@@ -1,7 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+
+using CardProto.System;
+using CardProto.System.UI;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Speech.Synthesis;
+using System;
+
 using Util;
+using GameLib.Server.Services.ServiceLoader;
+using GameLib.Server.Services;
+using System.IO;
+using GameLib.Server;
+using GameLib.Client.System.GraphicsHandler;
+
 namespace CardProto
 {
     /// <summary>
@@ -9,16 +23,33 @@ namespace CardProto
     /// </summary>
     public class Game1 : Game
     {
+        
         GraphicsDeviceManager graphics;
+        DataMapManager manager = new DataMapManager();
         SpriteBatch spriteBatch;
         NetworkInterface n;
-        string testings;
+        FileStream fs;
+        StreamWriter sw;
+        NetworkUpdatableString s;
+        RenderCallHelper helper;
+        TextureAtlas textureAtlas;
+        GameState gs;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            gs = new GameState();
+     
+            Player player = new Player();
+            gs.players.Add(player);
             Content.RootDirectory = "Content";
+            ServiceController.setRuntime(Runtime.HYBRID);
+            ServiceController.LoadGameState(gs);
+            
             n = new NetworkInterface();
-            n.ConnectToServer();
+            s = new NetworkUpdatableString(manager, "GameState");
+            
         }
 
         /// <summary>
@@ -32,6 +63,10 @@ namespace CardProto
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            fs = new FileStream("LOG"+DateTime.Now.ToString("hhmmddMMyyyy")+ ".txt", FileMode.OpenOrCreate);
+            sw = new StreamWriter(fs);
+            Console.SetOut(sw);
+            
         }
 
         /// <summary>
@@ -40,9 +75,20 @@ namespace CardProto
         /// </summary>
         protected override void LoadContent()
         {
+            
+            gs.dataManager.CreateNewMap();
+       
+            Random r = new Random();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-           
+            textureAtlas = new TextureAtlas(Content);
+            helper = new RenderCallHelper(spriteBatch, textureAtlas);
+            gs.soundEffects = new GameLib.Client.System.SoundHandlers.SoundEffectAtlas(Content);
+            Renderer.LoadRenderingAliases("rendering.alias", textureAtlas);
+            ServiceLoader.ClassHook();
+            ServiceLoader.ModuleHook();
+            gs.camera = new GameLib.Client.System.Camera(this.graphics.GraphicsDevice.Viewport);
+            //  gs.dataManager.SendData(n.main);
             // TODO: use this.Content to load your game content here
         }
 
@@ -62,14 +108,24 @@ namespace CardProto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            byte[] data = new byte [32000];
-            n.main.Receive(data);
-            testings = Util.Serilizer.Desrilize<string>(data);
+            gs.dataManager.CreateNewMap();
+            s.Reset();
 
-            // TODO: Add your update logic here
+            gs.dataManager.getCurrentMap().AddData("input:keyboard", Keyboard.GetState().GetPressedKeys());
+            int overallSize = 0;
+            int size = 0;
+            if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Escape))
+            {
+                this.Exit();
+            }
 
+
+
+
+
+            ServiceController.RunServices();
+            gs.dataManager.ReciveData(gs.dataManager.getCurrentMap());
+            gs.FrameCount++;
             base.Update(gameTime);
         }
 
@@ -80,8 +136,18 @@ namespace CardProto
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin(SpriteSortMode.Deferred,null,null,null,null,null, gs.camera.TransformMatrix);
+            Renderer.data = Renderer.data.OrderBy(a=>a.layer).ToList();
+            foreach (Renderable r in Renderer.data.Where(a=>a.draw&&a.layer != 50))
+            {
+                r.Render(textureAtlas,spriteBatch,helper);
+            }
+            spriteBatch.End();
             spriteBatch.Begin();
-            spriteBatch.DrawString(Content.Load<SpriteFont>("Font\\Console"), testings, new Vector2(22, 22), Color.Black);
+            foreach (Renderable r in Renderer.data.Where(a => a.draw && a.layer == 50))
+            {
+                r.Render(textureAtlas, spriteBatch, helper);
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 
