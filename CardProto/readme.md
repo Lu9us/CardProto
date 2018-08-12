@@ -12,6 +12,9 @@ Z creates a heater heating the adjacent tiles
 
 crops can't grow where there is too little water and too much water will destroy crops
 
+Brown tiles = no water
+
+
 Everything has a score 
 
 Crop  -1 +2 score for crops that suvive an aditional -1 if they die 
