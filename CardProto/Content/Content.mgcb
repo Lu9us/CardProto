@@ -1004,3 +1004,10 @@
 /processorParam:TextureFormat=Color
 /build:World/Wand.png
 
+#begin Font/Game.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font/Game.spritefont
+

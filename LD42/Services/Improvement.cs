@@ -13,6 +13,7 @@ namespace LD42.Services
       public Guid ID;
       public  Vector2 position;
       public string sprite;
+      public int cost;
       public abstract void Update(GameState gs);
     }
 }

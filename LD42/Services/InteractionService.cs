@@ -21,9 +21,10 @@ namespace LD42.Services
         private GameObjectService service;
         private WeatherService weather;
         private ImprovementService improvements;
+        private CropService crops;
         public void OnClose()
         {
-          
+            gs.dataManager.RemoveClient(this);
         }
 
         public void OnReciveMessage(object message)
@@ -46,6 +47,10 @@ namespace LD42.Services
             if (improvements == null)
             {
                 improvements = ((ImprovementService)GameLib.Server.Services.ServiceController.runningServices[typeof(ImprovementService).FullName]);
+            }
+            if (crops == null)
+            {
+                crops = ((CropService)GameLib.Server.Services.ServiceController.runningServices[typeof(CropService).FullName]);
             }
             if (player == null)
             {
@@ -84,6 +89,14 @@ namespace LD42.Services
                     Aqufier d = new Aqufier();
                     d.position = pos;
                     improvements.CreateImprovement(d);
+
+                }
+                if (thisState.Contains(Keys.V) && !lastState.Contains(Keys.V))
+                {
+                    Crops.Crop c = new Crops.Crop();
+                    c.location = pos;
+                    c.state = Crops.State.Growing;
+                    crops.AddCrop(c);
 
                 }
             }

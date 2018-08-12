@@ -110,14 +110,18 @@ namespace CardProto
             gs.dataManager.getCurrentMap().AddData("input:keyboard", Keyboard.GetState().GetPressedKeys());
             int overallSize = 0;
             int size = 0;
-           
-          
+            if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Escape))
+            {
+                this.Exit();
+            }
+
+
 
 
 
             ServiceController.RunServices();
             gs.dataManager.ReciveData(gs.dataManager.getCurrentMap());
-
+            gs.FrameCount++;
             base.Update(gameTime);
         }
 

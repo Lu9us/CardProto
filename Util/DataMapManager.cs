@@ -19,7 +19,7 @@ namespace Util
         private DataMap currentMap = new DataMap();
         private DataMap LastRecivedMap;
         private List<KeyValuePair<string, DataInterface>> clients = new List<KeyValuePair<string, DataInterface>>();
-
+        private List<KeyValuePair<string, DataInterface>> garbageList = new List<KeyValuePair<string, DataInterface>>();
         public DataMapManager()
         {
             BasicConfigurator.Configure();
@@ -113,7 +113,11 @@ namespace Util
                     }
                 }
             }
-
+            foreach (KeyValuePair<string, DataInterface> kvp in garbageList)
+            {
+                clients.Remove(kvp);
+            }
+            garbageList.Clear();
         }
         public void CreateNewMap()
         {
@@ -138,6 +142,9 @@ namespace Util
         {
             clients.Add(new KeyValuePair<string, DataInterface>(tag, client));
         }
-
+        public void RemoveClient(DataInterface client)
+        {
+            garbageList.Add(clients.Find(t => t.Value == client));
+        }
     }
 }

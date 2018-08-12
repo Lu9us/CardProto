@@ -1,5 +1,6 @@
 ﻿using GameLib.DataStructures.Interface;
 using GameLib.Server;
+using GameLib.Server.Services;
 using GameLib.Unified.Services.MapService;
 using LD42.Services.Renderers;
 using Microsoft.Xna.Framework;
@@ -17,10 +18,21 @@ namespace LD42.Services
         List<Improvement> improvments = new List<Improvement>();
         GameState gs;
         TileMap tm;
+        ResourceService rs;
 
         public void CreateImprovement(Improvement item)
         {
-            improvments.Add(item);
+            if (rs != null)
+            {
+                if (rs.getScore() >= item.cost)
+                {
+                    if (!improvments.Any(cs => cs.position == item.position))
+                    {
+                        improvments.Add(item);
+                        rs.DecreasePoints(item.cost, "improvment spawned at " + item.position);
+                    }
+                }
+            }
         }
 
         public void OnClose()
@@ -41,6 +53,11 @@ namespace LD42.Services
 
         public void OnUpdate()
         {
+            if (rs == null)
+            {
+                rs = ((ResourceService)ServiceController.runningServices[typeof(ResourceService).FullName]);
+            }
+
             if (tm == null)
             {
                 try

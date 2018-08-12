@@ -1,8 +1,10 @@
-﻿using GameLib.DataStructures.Interface;
+﻿using GameLib.Client.UI;
+using GameLib.DataStructures.Interface;
 using GameLib.Server;
 using GameLib.Server.Services;
 using GameLib.Unified.GameObject;
 using GameLib.Unified.Services.MapService;
+using LD42.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -32,14 +34,16 @@ namespace LD42
         private GameState gs;
         private Keys[] thisState;
         private Keys[] lastState;
+        private Label[] weather;
         private Player player;
+        private WeatherService weatherService;
         private GameObjectService service;
         public List<Vector2> facingToVector = new List<Vector2>();
         public static List<Vector2> globalFacingToVector;
 
         public void OnClose()
         {
-           
+            gs.dataManager.RemoveClient(this);
         }
 
         public void OnReciveMessage(object message)
@@ -58,11 +62,21 @@ namespace LD42
                 new Vector2(0,1),
                  new Vector2(1,0)
             };
+            weather = new Label[3];
+            for (int i = 0; i < 3; i++)
+            {
+                weather[i] = new Label(new Vector2(0, i * 11));
+
+            }
             globalFacingToVector = facingToVector;
         }
 
         public void OnUpdate()
         {
+            if (weatherService == null)
+            {
+                weatherService  = ((WeatherService)ServiceController.runningServices[typeof(WeatherService).FullName]);
+            }
             if (service == null)
             {
                 service = ((GameObjectService)ServiceController.runningServices[typeof(GameObjectService).FullName]);
@@ -76,7 +90,18 @@ namespace LD42
             {
                 lastState = thisState;
             }
-            
+            try
+            {
+                GameObject playerGo = service.GetGameObject(player.playerGOID);
+                Vector2 lastPos = playerGo.pos;
+                weather[0].Update("Tempreture: " + weatherService.tempMap[(int)lastPos.X, (int)lastPos.Y]);
+                weather[1].Update("Ground Water: " + weatherService.waterMap[(int)lastPos.X, (int)lastPos.Y]);
+                weather[2].Update("Rain: " + weatherService.rainMap[(int)lastPos.X, (int)lastPos.Y]);
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public void Update(object data, DataMap source)
@@ -96,16 +121,22 @@ namespace LD42
                 {
                     if (playerGo.pos.Y > 0)
                     {
-                        playerGo.pos.Y--;
-                        player.varTable.SetItem("facing", Facing.NORTH);
+                        if (tileMap[(int)playerGo.pos.X, (int)playerGo.pos.Y-1] != 4)
+                        {
+                            playerGo.pos.Y--;
+                            player.varTable.SetItem("facing", Facing.NORTH);
+                        }
                     }
                 }
                 if (thisState.Contains(Keys.A) && !lastState.Contains(Keys.A))
                 {
                     if (playerGo.pos.X > 0 )
                     {
-                        playerGo.pos.X--;
-                        player.varTable.SetItem("facing", Facing.EAST);
+                        if (tileMap[(int)playerGo.pos.X-1, (int)playerGo.pos.Y] != 4)
+                       {
+                            playerGo.pos.X--;
+                            player.varTable.SetItem("facing", Facing.EAST);
+                        }
                     }
 
                 }
@@ -113,8 +144,11 @@ namespace LD42
                 {
                     if (playerGo.pos.X < tileMap.GetLength(0))
                     {
-                        playerGo.pos.X++;
-                        player.varTable.SetItem("facing", Facing.WEST);
+                        if (tileMap[(int)playerGo.pos.X+1, (int)playerGo.pos.Y] != 4)
+                        {
+                            playerGo.pos.X++;
+                            player.varTable.SetItem("facing", Facing.WEST);
+                        }
                     }
 
                 }
@@ -122,11 +156,17 @@ namespace LD42
                 {
                     if (playerGo.pos.Y < tileMap.GetLength(1))
                     {
-                        playerGo.pos.Y++;
-                        player.varTable.SetItem("facing", Facing.SOUTH);
+                        if (tileMap[(int)playerGo.pos.X, (int)playerGo.pos.Y+1] != 4)
+                        {
+                            playerGo.pos.Y++;
+                            player.varTable.SetItem("facing", Facing.SOUTH);
+                        }
                     }
                 }
-
+                if (tileMap[(int)playerGo.pos.X, (int)playerGo.pos.Y] == 4)
+                {
+                    ((GameEndService)GameLib.Server.Services.ServiceController.runningServices[typeof(GameEndService).FullName]).GameOver();
+                }
             }
             catch (Exception e)
             {
