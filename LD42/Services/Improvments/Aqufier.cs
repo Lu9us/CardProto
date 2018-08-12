@@ -15,13 +15,15 @@ namespace LD42.Services
             sprite = "aqufier";
             cost = 25;
         }
+        int maxValue = 24;
+        int currentValue = 0;
         public override void Update(GameState gs)
         {
             try
             {
-
+                
                 WeatherService weather = gs.varTable.GetItem<WeatherService>("weather");
-                MapService.SetNeighboursContainValue(4, weather.waterMap, (int)position.X, (int)position.Y);
+                MapService.SetNeighboursContainValue(2, weather.waterMap, (int)position.X, (int)position.Y);
             }
             catch (Exception e)
             {

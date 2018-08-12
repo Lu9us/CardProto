@@ -36,6 +36,7 @@ namespace GameLib.Unified.GameObject
             go.name = template.name;
             go.vars = s.DeSerilize<HashVarTable>( s.Serilize<HashVarTable>(template.vars));
             go.spriteList = template.spriteList;
+            go.pos = pos;
             dataStore.Add(go.ID, go);
         }
 

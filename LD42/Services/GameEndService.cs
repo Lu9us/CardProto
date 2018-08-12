@@ -29,9 +29,9 @@ namespace LD42
         public void GameOver()
         {
             gs.soundEffects.playSound("SoundEffects/death");
-            label = new Label(new Microsoft.Xna.Framework.Vector2(250,200));
+            label = new Label(new Microsoft.Xna.Framework.Vector2(320,200));
             label.Update("GAME OVER");
-            score = new Label(new Microsoft.Xna.Framework.Vector2(170, 240));
+            score = new Label(new Microsoft.Xna.Framework.Vector2(340, 240));
             score.Update("Score: "+resourceService.getScore());
             GameLib.Server.Services.ServiceController.runningServices.Remove(typeof(InteractionService).FullName);
             interactionService.OnClose();

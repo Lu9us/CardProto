@@ -35,6 +35,7 @@ namespace GameLib.Unified.Services
 
         public void OnUpdate()
         {
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
             if (service == null)
             {
                 service = ((GameObject.GameObjectService)ServiceController.runningServices[typeof(GameObject.GameObjectService).FullName]);
@@ -42,17 +43,18 @@ namespace GameLib.Unified.Services
 
             foreach (Player player in playerData)
             {
-                if (player.playerGOID == Guid.Empty||!gs.varTable.GetItem<Dictionary<Guid,GameObject.GameObject>>("GameObjects").ContainsKey(player.playerGOID))
+                if (player.playerGOID == Guid.Empty || !gs.varTable.GetItem<Dictionary<Guid, GameObject.GameObject>>("GameObjects").ContainsKey(player.playerGOID))
                 {
                     Guid g = Guid.NewGuid();
                     GameObjectRequest r = new GameObjectRequest();
                     r.eventType = GameObjectEvent.CREATE;
                     r.ID = g;
                     r.name = "Player";
-                    r.pos = Vector2.Zero;
+                    r.pos = Vector2.Zero + new Vector2(rand.Next(99), rand.Next(99));
                     player.playerGOID = g;
                     service.AddGameObjectRequest(r);
                 }
+
             }
         }
 

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Client\Services\MapRenderer.cs" />
+    <Compile Include="Client\System\Camera.cs" />
     <Compile Include="Client\System\GraphicsHandlers\RenderCallHelper.cs" />
     <Compile Include="Client\System\GraphicsHandlers\TextureAlias.cs" />
     <Compile Include="Client\System\GraphicsHandlers\TextureAtlas.cs" />
@@ -87,7 +88,6 @@
     <Compile Include="Unified\GameObject\GameObjectRenderer.cs" />
     <Compile Include="Unified\GameObject\GameObjectService.cs" />
     <Compile Include="Unified\GameObject\GameObjectTemplate.cs" />
-    <Compile Include="Unified\GameObject\PlayerService.cs" />
     <Compile Include="Unified\Services\MapService\MapService.cs" />
     <Compile Include="Unified\Services\MapService\ProceduralMap\MapGenerator.cs" />
     <Compile Include="Unified\Services\MapService\Tile\Tile.cs" />

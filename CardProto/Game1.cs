@@ -40,12 +40,13 @@ namespace CardProto
         {
             graphics = new GraphicsDeviceManager(this);
             gs = new GameState();
+     
             Player player = new Player();
             gs.players.Add(player);
             Content.RootDirectory = "Content";
             ServiceController.setRuntime(Runtime.HYBRID);
             ServiceController.LoadGameState(gs);
-           
+            
             n = new NetworkInterface();
             s = new NetworkUpdatableString(manager, "GameState");
             
@@ -76,6 +77,7 @@ namespace CardProto
         {
             
             gs.dataManager.CreateNewMap();
+       
             Random r = new Random();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -85,6 +87,7 @@ namespace CardProto
             Renderer.LoadRenderingAliases("rendering.alias", textureAtlas);
             ServiceLoader.ClassHook();
             ServiceLoader.ModuleHook();
+            gs.camera = new GameLib.Client.System.Camera(this.graphics.GraphicsDevice.Viewport);
             //  gs.dataManager.SendData(n.main);
             // TODO: use this.Content to load your game content here
         }
@@ -133,11 +136,17 @@ namespace CardProto
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred,null,null,null,null,null, gs.camera.TransformMatrix);
             Renderer.data = Renderer.data.OrderBy(a=>a.layer).ToList();
-            foreach (Renderable r in Renderer.data.Where(a=>a.draw))
+            foreach (Renderable r in Renderer.data.Where(a=>a.draw&&a.layer != 50))
             {
                 r.Render(textureAtlas,spriteBatch,helper);
+            }
+            spriteBatch.End();
+            spriteBatch.Begin();
+            foreach (Renderable r in Renderer.data.Where(a => a.draw && a.layer == 50))
+            {
+                r.Render(textureAtlas, spriteBatch, helper);
             }
             spriteBatch.End();
             // TODO: Add your drawing code here

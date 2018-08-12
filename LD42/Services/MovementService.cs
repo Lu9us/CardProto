@@ -167,6 +167,8 @@ namespace LD42
                 {
                     ((GameEndService)GameLib.Server.Services.ServiceController.runningServices[typeof(GameEndService).FullName]).GameOver();
                 }
+                gs.camera.pos = new Vector2( service.GetGameObject(player.playerGOID).pos.X * 16, service.GetGameObject(player.playerGOID).pos.Y * 16 );
+                gs.camera.zoom = 1.5f;
             }
             catch (Exception e)
             {

@@ -1,4 +1,5 @@
-﻿using GameLib.Client.System.SoundHandlers;
+﻿using GameLib.Client.System;
+using GameLib.Client.System.SoundHandlers;
 using GameLib.DataStructures;
 using GameLib.DataStructures.Implementations;
 using System;
@@ -18,6 +19,7 @@ namespace GameLib.Server
         public List<Player> players = new List<Player>();
         public bool gameRunning = false;
         public WorldState world = new WorldState();
+        public Camera camera;
         public int FrameCount;
         public int SecondFrameCount { get { return FrameCount % 60;} }
         public IExtendedVarTable varTable = new HashVarTable();
