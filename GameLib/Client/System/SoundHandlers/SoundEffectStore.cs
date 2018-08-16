@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GameLib.Client.System.SoundHandlers
 {
-  public class SoundEffectAtlas
+    public class SoundEffectAtlas
     {
         ContentManager cm;
         Dictionary<string, SoundEffect> sfDictionary = new Dictionary<string, SoundEffect>();
@@ -20,22 +20,30 @@ namespace GameLib.Client.System.SoundHandlers
 
         public void playSound(string effect)
         {
-            if (!sfDictionary.ContainsKey(effect))
+            try
             {
-                SoundEffect seffect = cm.Load<SoundEffect>(effect);
-                if (seffect != null)
+                if (!sfDictionary.ContainsKey(effect))
                 {
-                    sfDictionary.Add(effect, seffect);
+
+                    SoundEffect seffect = cm.Load<SoundEffect>(effect);
+                    if (seffect != null)
+                    {
+                        sfDictionary.Add(effect, seffect);
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-                else
-                {
-                    return;
-                }
+                sfDictionary[effect].Play();
             }
-            sfDictionary[effect].Play();
+
+            catch (Exception e)
+            {
+
+            }
+
         }
-
-
 
     }
 }

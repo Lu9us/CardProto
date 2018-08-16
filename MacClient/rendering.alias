@@ -1,0 +1,12 @@
+[
+    {"name":"grass","x":124,"y":61,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"Tiles\\Floor"},
+    {"name":"dirt","x":15,"y":304,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"Tiles\\Floor"},
+    {"name":"player","x":0,"y":0,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"World\\Player0"},
+    {"name":"soil","x":0,"y":490,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"Tiles\\Floor"},
+    {"name":"ice","x":240,"y":292,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"Tiles\\Floor"},
+    {"name":"water","x":251,"y":353,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"Tiles\\Floor"},
+     {"name":"drain","x":65,"y":18,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"World\\Decor0"},
+     {"name":"heater","x":47,"y":0,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"World\\Light"},
+      {"name":"aqufier","x":16,"y":32,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"World\\Chest0"},
+        {"name":"crop","x":63,"y":50,"h":16,"w":16,"offsetX":16,"offsetY":16,"resource":"World\\Ground0"}
+    ]

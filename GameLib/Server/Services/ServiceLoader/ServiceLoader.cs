@@ -14,6 +14,7 @@ namespace GameLib.Server.Services.ServiceLoader
         public static string CLASS_FILE = "class_file.ini";
         public static string MODULE_FILE = "module_file.ini";
         public static readonly List<Assembly> loadedAssemblies = new List<Assembly>();
+        public static string WORKING_DIR = Environment.CurrentDirectory;
          static ServiceLoader()
         {
             System.Console.WriteLine("Starting Service loader with filepaths: ");

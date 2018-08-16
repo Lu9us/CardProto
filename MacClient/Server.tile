@@ -1,0 +1,7 @@
+[
+    {"ID":0,"name":"grass","filePath":"grass"},
+    {"ID":1,"name":"dirt","filePath":"dirt"},
+    {"ID":2,"name":"tiledSoil","filePath":"soil"},
+    {"ID":3,"name":"ice","filePath":"ice"},
+    {"ID":4,"name":"water","filePath":"water"}
+    ]
