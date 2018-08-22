@@ -85,9 +85,9 @@ namespace GameLib.Unified.Services.MapService
             gs = s;
             if (ServiceController.getRuntime() == Runtime.SERVER||ServiceController.getRuntime()==Runtime.HYBRID)
             {
-                if (File.Exists("Server.tile"))
+                if (File.Exists("Config/Server.tile"))
                 {
-                    byte[] tiledata = File.ReadAllBytes("Server.tile");
+                    byte[] tiledata = File.ReadAllBytes("Config/Server.tile");
                     tiles = serizilizer.DeSerilize<List<Tile>>(tiledata);
                     gs.varTable.AddItem("tiles", tiles);
 

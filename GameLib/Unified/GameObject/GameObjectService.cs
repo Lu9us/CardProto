@@ -63,7 +63,7 @@ namespace GameLib.Unified.GameObject
         public void OnStart(GameState s)
         {
             gs = s;
-            LoadTemplates("gameObjects.template");
+            LoadTemplates("Config/gameObjects.template");
             s.dataManager.AddClient("GameObject", this);
             gs.varTable.AddItem("GameObjects", dataStore);
             GameObjectRenderer r = new GameObjectRenderer(dataStore);

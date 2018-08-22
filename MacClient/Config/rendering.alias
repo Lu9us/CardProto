@@ -1,0 +1,12 @@
+[
+    {"name":"grass","x":1,"y":1560,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+    {"name":"dirt","x":15,"y":304,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+    {"name":"player","x":0,"y":0,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+    {"name":"soil","x":0,"y":490,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+    {"name":"ice","x":240,"y":292,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+    {"name":"water","x":241,"y":353,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+     {"name":"drain","x":65,"y":18,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+     {"name":"heater","x":47,"y":0,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+      {"name":"aqufier","x":24,"y":32,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"},
+        {"name":"crop","x":63,"y":50,"h":24,"w":24,"offsetX":24,"offsetY":24,"resource":"Tiles\\tiles"}
+    ]

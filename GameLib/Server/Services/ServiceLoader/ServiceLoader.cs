@@ -11,8 +11,8 @@ namespace GameLib.Server.Services.ServiceLoader
 {
   public static  class ServiceLoader
     {
-        public static string CLASS_FILE = "class_file.ini";
-        public static string MODULE_FILE = "module_file.ini";
+        public static string CLASS_FILE = "Config/class_file.ini";
+        public static string MODULE_FILE = "Config/module_file.ini";
         public static readonly List<Assembly> loadedAssemblies = new List<Assembly>();
          static ServiceLoader()
         {
