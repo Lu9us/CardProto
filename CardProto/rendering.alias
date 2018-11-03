@@ -1,0 +1,4 @@
+[
+    {"name":"star","x":0,"y":0,"h":-1,"w":-1,"offsetX":0,"offsetY":0,"resource":"World\\Star"},
+    {"name":"line","x":0,"y":0,"h":-1,"w":-1,"offsetX":0,"offsetY":0,"resource":"World\\line"}
+    ]
