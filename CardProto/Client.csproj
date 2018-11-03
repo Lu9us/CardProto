@@ -70,6 +70,10 @@
       <Project>{f86bf1ee-b0a2-4bab-960c-70c174e148f5}</Project>
       <Name>Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WarInHeven\WarInHeven.csproj">
+      <Project>{500293e1-a43b-4971-8f94-de864d7481db}</Project>
+      <Name>WarInHeven</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

@@ -66,9 +66,11 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Client\Services\MapRenderer.cs" />
     <Compile Include="Client\System\Camera.cs" />
+    <Compile Include="Client\System\GraphicsHandlers\GraphicsHelper.cs" />
     <Compile Include="Client\System\GraphicsHandlers\RenderCallHelper.cs" />
     <Compile Include="Client\System\GraphicsHandlers\TextureAlias.cs" />
     <Compile Include="Client\System\GraphicsHandlers\TextureAtlas.cs" />
+    <Compile Include="Client\System\RandomHelper.cs" />
     <Compile Include="Client\System\Renderable.cs" />
     <Compile Include="Client\System\Renderer.cs" />
     <Compile Include="Client\System\SoundHandlers\SoundEffectStore.cs" />

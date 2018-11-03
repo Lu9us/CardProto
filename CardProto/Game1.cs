@@ -40,15 +40,16 @@ namespace CardProto
         {
             graphics = new GraphicsDeviceManager(this);
             gs = new GameState();
-     
+            graphics.PreferredBackBufferHeight = 1000;
+            graphics.PreferredBackBufferWidth = 1280;
             Player player = new Player();
             gs.players.Add(player);
             Content.RootDirectory = "Content";
             ServiceController.setRuntime(Runtime.HYBRID);
             ServiceController.LoadGameState(gs);
-            
+            IsMouseVisible = true;
             n = new NetworkInterface();
-            s = new NetworkUpdatableString(manager, "GameState");
+            
             
         }
 
@@ -85,9 +86,10 @@ namespace CardProto
             helper = new RenderCallHelper(spriteBatch, textureAtlas);
             gs.soundEffects = new GameLib.Client.System.SoundHandlers.SoundEffectAtlas(Content);
             Renderer.LoadRenderingAliases("rendering.alias", textureAtlas);
+            gs.camera = new GameLib.Client.System.Camera(this.graphics.GraphicsDevice.Viewport);
             ServiceLoader.ClassHook();
             ServiceLoader.ModuleHook();
-            gs.camera = new GameLib.Client.System.Camera(this.graphics.GraphicsDevice.Viewport);
+           
             //  gs.dataManager.SendData(n.main);
             // TODO: use this.Content to load your game content here
         }
@@ -109,9 +111,10 @@ namespace CardProto
         protected override void Update(GameTime gameTime)
         {
             gs.dataManager.CreateNewMap();
-            s.Reset();
 
             gs.dataManager.getCurrentMap().AddData("input:keyboard", Keyboard.GetState().GetPressedKeys());
+            gs.dataManager.getCurrentMap().AddData("input:mouse", Mouse.GetState());
+            
             int overallSize = 0;
             int size = 0;
             if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Escape))
@@ -138,13 +141,13 @@ namespace CardProto
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.Deferred,null,null,null,null,null, gs.camera.TransformMatrix);
             Renderer.data = Renderer.data.OrderBy(a=>a.layer).ToList();
-            foreach (Renderable r in Renderer.data.Where(a=>a.draw&&a.layer != 50))
+            foreach (Renderable r in Renderer.data.Where(a=>a.draw&&a.layer < 50))
             {
                 r.Render(textureAtlas,spriteBatch,helper);
             }
             spriteBatch.End();
             spriteBatch.Begin();
-            foreach (Renderable r in Renderer.data.Where(a => a.draw && a.layer == 50))
+            foreach (Renderable r in Renderer.data.Where(a => a.draw && a.layer >= 50))
             {
                 r.Render(textureAtlas, spriteBatch, helper);
             }

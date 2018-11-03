@@ -20,8 +20,9 @@ namespace GameLib.Server
         public bool gameRunning = false;
         public WorldState world = new WorldState();
         public Camera camera;
-        public int FrameCount;
-        public int SecondFrameCount { get { return FrameCount % 60;} }
+        public long FrameCount;
+        public int SecondFrameCount { get { return (int)(FrameCount % 60);} }
+        public int runtime { get { return (int)(FrameCount / 60); } }
         public IExtendedVarTable varTable = new HashVarTable();
     }
 }
