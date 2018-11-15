@@ -47,6 +47,7 @@ namespace WarInHeven.DataStructures
 
         public void Update(object data, DataMap source)
         {
+            starData[2].Update(gs.runtime.ToString());
             StarMap world = gs.varTable.GetItem<StarMap>("world");
             if (data is Keys[])
             {
@@ -79,6 +80,7 @@ namespace WarInHeven.DataStructures
                     {
                         starData[0].Update(s.name);
                         starData[1].Update(world.empires.First(a => a.planets.Contains(s)).name);
+                     
                     }
 
                 }

@@ -43,12 +43,17 @@
   <ItemGroup>
     <Compile Include="DataStructures\AI\AIEmpireController.cs" />
     <Compile Include="DataStructures\AI\AIState.cs" />
+    <Compile Include="DataStructures\AI\AITarget.cs" />
+    <Compile Include="DataStructures\AI\FleetController.cs" />
     <Compile Include="DataStructures\AI\NeutralEmpireController.cs" />
+    <Compile Include="DataStructures\AI\Order\Order.cs" />
     <Compile Include="DataStructures\ControllerService.cs" />
+    <Compile Include="DataStructures\GameData\Fleet.cs" />
     <Compile Include="DataStructures\Interfaces\EmpireController.cs" />
     <Compile Include="DataStructures\Interfaces\IController.cs" />
     <Compile Include="DataStructures\GameData\Empire.cs" />
     <Compile Include="DataStructures\GameData\Star.cs" />
+    <Compile Include="DataStructures\Rendering\FleetRendering.cs" />
     <Compile Include="DataStructures\Service\StarMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataStructures\Rendering\StarRendering.cs" />
@@ -63,6 +68,8 @@
       <Name>Util</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DataStructures\AI\PathFinding\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -73,7 +73,7 @@ namespace GameLib.Server.Services.ServiceLoader
                 }
                 catch (Exception e)
                 {
-
+                    Console.WriteLine(e.StackTrace);
                 }
                 
             }

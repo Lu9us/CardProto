@@ -28,6 +28,9 @@ namespace WarInHeven
             {
                 
                 helper.Draw(atlas.GetTextureData("star"), (int)s.position.X, (int)s.position.Y, this.layer,s.color);
+                helper.DrawString("Font\\Game",s.name, (int)s.position.X+40, (int)s.position.Y+10, this.layer, s.color);
+                helper.DrawString("Font\\Game", s.population.ToString(), (int)s.position.X + 40, (int)s.position.Y + 20, this.layer, s.color);
+                helper.DrawString("Font\\Game", s.baseWealthRate.ToString(), (int)s.position.X + 40, (int)s.position.Y + 35, this.layer, s.color);
                 foreach (Star sn in s.neigbours)
                 {
                     if (sn != null)
@@ -38,4 +41,4 @@ namespace WarInHeven
             }
         }
     }
-}
+}  

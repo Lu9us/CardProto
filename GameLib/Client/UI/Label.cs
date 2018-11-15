@@ -14,6 +14,7 @@ namespace GameLib.Client.UI
     {
         Vector2 position;
         string value ="";
+        Color c = Color.Black;
         public Label(Vector2 position)
         {
             this.position = position;
@@ -22,10 +23,13 @@ namespace GameLib.Client.UI
         {
             this.value = value;
         }
-
+        public void UpdateColor(Color c)
+        {
+            this.c = c;
+        }
         public override void Render(TextureAtlas atlas, SpriteBatch batch, RenderCallHelper helper)
         {
-            batch.DrawString(atlas.GetFont("Font\\Game"), value, position, Color.Black);
+            batch.DrawString(atlas.GetFont("Font\\Game"), value, position,c);
         }
     }
 }

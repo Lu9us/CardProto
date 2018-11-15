@@ -18,6 +18,24 @@ namespace GameLib.Client.System.GraphicsHandler
             this.atlas = atlas;
         }
 
+        public void DrawString(string font,string text, int x, int y, int layer)
+        {
+            SpriteFont sf = atlas.GetFont(font);
+
+            if (font != null)
+            {
+                sb.DrawString(sf, text, new Vector2(x, y), Color.White);
+            }
+        }
+        public void DrawString(string font, string text, int x, int y, int layer,Color color)
+        {
+            SpriteFont sf = atlas.GetFont(font);
+
+            if (font != null)
+            {
+                sb.DrawString(sf, text, new Vector2(x, y), color);
+            }
+        }
         public void Draw(TextureAlias ts,int x,int y,int layer)
         {
             if (ts.w == -1 || ts.h == -1)

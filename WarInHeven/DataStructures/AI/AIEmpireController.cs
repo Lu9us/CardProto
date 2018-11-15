@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameLib.Client.System;
 using GameLib.Server;
+using WarInHeven.DataStructures.AI.Orders;
 using WarInHeven.DataStructures.Interfaces;
 
 namespace WarInHeven.DataStructures.AI
@@ -18,6 +19,9 @@ namespace WarInHeven.DataStructures.AI
             this.empire = empire;
         }
 
+        public List<Order> openOrders = new List<Order>();
+        public List<Order> impossibleOrders = new List<Order>();
+
         public override void Update(GameState gs)
         {
             StarMap starMap=gs.varTable.GetItem<StarMap>("world");
@@ -25,14 +29,29 @@ namespace WarInHeven.DataStructures.AI
             if (AIState == AIState.EXPAND)
             {
                 Star choice = empire.planets[RandomHelper.getRandomInt(0, empire.planets.Count)];
+                if (empire.fleets.Count < 1 || empire.fleets.Count < openOrders.Count(a=>!a.beingDone)/2)
+                {
+                    starMap.MakeNewFleet(empire, empire.planets[0]);
+                }
                 foreach (Star planet in choice.neigbours)
                 {
-                    if (neutral.planets.Contains(planet))
+                    if (planet != null)
                     {
-                        neutral.planets.Remove(planet);
-                        planet.color = empire.color;
-                        empire.planets.Add(planet);
-                        break;
+                        if (planet.empire == neutral)
+                        {
+                            Order order = new Orders.Order { target = planet, type = Orders.OrderType.MoveTo, Priority = 10};
+                            if (!openOrders.
+                                Any(a => a.target == order.target 
+                                && a.type == order.type)
+                                && !impossibleOrders.Any(a => a.target == order.target 
+                                && a.type == order.type
+                                )
+                                )
+                            { 
+                                openOrders.Add(order);
+                            }
+                            break;
+                        }
                     }
                 }
             }

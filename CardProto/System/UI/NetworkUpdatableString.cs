@@ -34,6 +34,7 @@ namespace CardProto.System.UI
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.StackTrace);
               //  batch.DrawString(atlas.GetFont("Font\\Console"), "Rendering failed for "+ToString(), new Microsoft.Xna.Framework.Vector2(x, y),Color.Red);
             }
         }

@@ -14,6 +14,10 @@ namespace GameLib.Client.System
         {
             return r.Next(min, max);
         }
+        public static double getRandomDouble (int min = 0, int max = 1)
+        {
+            return r.Next(min, max) + r.NextDouble();
+        }
 
 
     }

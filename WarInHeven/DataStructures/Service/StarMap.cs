@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Util;
 using WarInHeven.DataStructures.AI;
+using WarInHeven.DataStructures.GameData;
+using WarInHeven.DataStructures.Rendering;
 
 namespace WarInHeven
 {
@@ -21,7 +23,8 @@ namespace WarInHeven
      public List<Empire> addList = new List<Empire>();
      public List<Star> list = new List<Star>();
      public List<Empire> empires = new List<Empire>();
-
+        public List<Fleet> fleets = new List<Fleet>();
+        long lastRuntime = 0;
         public void OnClose()
         {
          
@@ -49,19 +52,21 @@ namespace WarInHeven
             for (int i = 0; i < 1000; i++)
             {
                 Star star = new Star();
-                star.name = "oh hi mark";
+                star.name = star.id.ToString();
                 star.position = new Microsoft.Xna.Framework.Vector2(RandomHelper.getRandomInt(0,10000),RandomHelper.getRandomInt(0,10000));
                 star.color = e.color;
                 star.neigbours = new Star[RandomHelper.getRandomInt(2, 9)];
+                star.empire = e;
                 list.Add(star);
                 e.planets.Add(star);
+
                 
             }
           
             foreach (Star star in list)
             {
                 List<Star> copyList = new List<Star>(list);
-                copyList.Sort((v2, v1) => Vector2.Distance(v1.position, star.position).CompareTo(Vector2.Distance(v2.position, star.position)));
+                copyList.Sort((v2, v1) => Math.Abs( Vector2.Distance(v1.position, star.position)).CompareTo(Math.Abs( Vector2.Distance(v2.position, star.position))) );
                 copyList.Reverse();
 
                 for (int i = 1; i < star.neigbours.Length; i++)
@@ -71,8 +76,15 @@ namespace WarInHeven
                         star.neigbours[i] = copyList[i];
                     }
                 }
+                List<Star> data = star.neigbours.ToList();
+                data.RemoveAll(item => item == null);
+                star.neigbours = data.ToArray();
             }
+
+          
+
             StarRendering starRendering = new StarRendering(s,list);
+            FleetRendering fleetRendering = new FleetRendering(this);
             gs.varTable.AddItem("world", this);
         }
 
@@ -85,17 +97,53 @@ namespace WarInHeven
                     empire.controller.Update(gs);
                 }
             }
-            foreach (Empire e in addList)
+            if (gs.runtime > lastRuntime)
             {
-                empires.Add(e);
+                foreach (Fleet fleet in fleets)
+                {
+                    fleet.controller.Update(gs);
+                }
+
+                foreach (Empire e in empires)
+                {
+                    e.update(this);
+                }
+
+                lastRuntime = gs.runtime;
             }
-            addList.Clear();
-            foreach (Empire e in deleteList)
-            {
-                empires.Remove(e);
+            
+                foreach (Empire e in addList)
+                {
+                    empires.Add(e);
+                }
+                addList.Clear();
+                foreach (Empire e in deleteList)
+                {
+                    empires.Remove(e);
+                }
+                deleteList.Clear();
+            
+        }
+
+        public void MakeNewFleet(Empire e, Star planet)
+        {
+            Fleet f = new Fleet();
+            f.name = "fleet";
+            f.owner = e;
+            e.fleets.Add(f);
+            f.position = planet;
+            fleets.Add(f);
+            f.controller = new FleetController(f);
             }
-            deleteList.Clear();
+
+        public void SetPlanetToEmpire(Empire empire, Star planet)
+        {
         
+            planet.empire.planets.Remove(planet);
+            planet.color = empire.color;
+            planet.empire = empire;
+            empire.planets.Add(planet);
+
         }
 
         public void Update(object data, DataMap source)

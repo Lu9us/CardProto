@@ -22,7 +22,7 @@ namespace WarInHeven.DataStructures.AI
         public override void Update(GameState gs)
         {
             StarMap worldState = gs.varTable.GetItem<StarMap>("world");
-            if (worldState.empires.Where(a => a.active).Count() < 5)
+            if (worldState.empires.Where(a => a.active).Count() < 10)
             {
                 Star startingPoint = worldState.list[RandomHelper.getRandomInt(0, worldState.list.Count)];
                 Empire parent = worldState.empires.First(a => a.planets.Contains(startingPoint));

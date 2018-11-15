@@ -63,6 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\PathFinding\AStarPathFinder.cs" />
+    <Compile Include="AI\PathFinding\IPathFinder.cs" />
+    <Compile Include="AI\PathFinding\PathFindingNode.cs" />
+    <Compile Include="AI\PathFinding\PathFindResult.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Client\Services\MapRenderer.cs" />
     <Compile Include="Client\System\Camera.cs" />
