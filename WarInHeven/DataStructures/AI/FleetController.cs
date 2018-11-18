@@ -19,6 +19,7 @@ namespace WarInHeven.DataStructures.AI
         private static Dictionary<FleetController, List<Label>> aiDebugPanel = new Dictionary<FleetController, List<Label>>();
         public Fleet fleet = new Fleet();
         private Order currentOrder;
+        public static bool AiDebug = false;
         IPathFinder pathFinder = new AStarPathFinder(Star.Sort);
         List<PathFindingNode> currentPath = new List<PathFindingNode>();
         public bool busy = false;
@@ -40,18 +41,32 @@ namespace WarInHeven.DataStructures.AI
 
         public void AIDebug()
         {
-            if (currentOrder != null)
-            {
-                aiDebugPanel[this][0].Update(((Star)currentOrder.target).name + " " + ((Star)currentOrder.target).position);
-            }
+            
             String currentPath = "current path: ";
             foreach (PathFindingNode s in this.currentPath)
             {
                 currentPath += ((Star)s).name + " " + ((Star)s).position;
             }
-            aiDebugPanel[this][1].Update(currentPath);
-            aiDebugPanel[this][2].Update(((AIEmpireController)fleet.owner.controller).openOrders.Count.ToString());
-            aiDebugPanel[this][3].Update(fleet.position.name + " " + fleet.position.position);
+            if (AiDebug)
+            {
+                if (currentOrder != null)
+                {
+                    aiDebugPanel[this][0].Update(((Star)currentOrder.target).name + " " + ((Star)currentOrder.target).position);
+                }
+                aiDebugPanel[this][1].Update(currentPath);
+                aiDebugPanel[this][2].Update(((AIEmpireController)fleet.owner.controller).openOrders.Count.ToString());
+                aiDebugPanel[this][3].Update(fleet.position.name + " " + fleet.position.position);
+            }
+            else
+            {
+                aiDebugPanel[this][0].Update(String.Empty);
+                aiDebugPanel[this][1].Update(String.Empty);
+                aiDebugPanel[this][2].Update(String.Empty);
+                aiDebugPanel[this][3].Update(String.Empty);
+            }
+
+
+
         }
 
 

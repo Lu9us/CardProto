@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Util;
+using WarInHeven.DataStructures.AI;
 
 namespace WarInHeven.DataStructures
 {
@@ -68,6 +69,19 @@ namespace WarInHeven.DataStructures
                 {
                     gs.camera.pos = new Microsoft.Xna.Framework.Vector2(gs.camera.pos.X - 10, gs.camera.pos.Y);
                 }
+                if(keys.Contains(Keys.Q))
+                {
+                    gs.camera.zoom += 0.01f;
+                }
+                if (keys.Contains(Keys.E))
+                {
+                    gs.camera.zoom -= 0.01f;
+                }
+                if (keys.Contains(Keys.Tab))
+                {
+                    FleetController.AiDebug = !FleetController.AiDebug;
+                }
+
             }
             if (data is MouseState)
             {

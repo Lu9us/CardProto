@@ -108,6 +108,10 @@ namespace WarInHeven
                 {
                     e.update(this);
                 }
+                foreach (Star s in list)
+                {
+                    s.update(this);
+                }
 
                 lastRuntime = gs.runtime;
             }
@@ -116,6 +120,8 @@ namespace WarInHeven
                 {
                     empires.Add(e);
                 }
+               
+                
                 addList.Clear();
                 foreach (Empire e in deleteList)
                 {
@@ -144,6 +150,17 @@ namespace WarInHeven
             planet.empire = empire;
             empire.planets.Add(planet);
 
+        }
+
+        public void MakeNewEmpire(Star planet)
+        {
+            Empire empire = new Empire();
+            empire.parent = planet.empire;
+            empire.controller = new AIEmpireController(empire);
+            planet.empire.children.Add(empire);
+            addList.Add(empire);
+            SetPlanetToEmpire(empire, planet);
+            
         }
 
         public void Update(object data, DataMap source)

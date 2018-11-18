@@ -30,11 +30,19 @@ namespace WarInHeven
             color = GraphicsHelper.getRandomColor();
         }
 
+        public bool isCapital(Star star)
+        {
+            if(planets.Count > 0)
+            {
+                return planets[0].id == star.id;
+            }
+            return false;
+        }
+
         public void update(StarMap sm)
         {
             foreach (Star star in planets)
             {
-                star.update(sm);
                 money += star.baseWealthRate * (star.population / 2);
             }
         }

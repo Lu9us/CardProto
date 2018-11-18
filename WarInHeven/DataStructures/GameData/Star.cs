@@ -22,6 +22,7 @@ namespace WarInHeven
         public double population;
         public int inferstructure = 1;
         public double popUpdateRate = 0.5;
+        public double resistance = 0;
 
         public Star()
         {
@@ -49,6 +50,19 @@ namespace WarInHeven
                     population += popUpdateRate * inferstructure;
                 }
 
+                if (!empire.isCapital(this))
+                {
+
+                    if (inferstructure < 2)
+                    {
+                        resistance++;
+                    }
+                    if (resistance > 50)
+                    {
+                        map.MakeNewEmpire(this);
+                        resistance = 0;
+                    }
+                }
             }
         }
 
