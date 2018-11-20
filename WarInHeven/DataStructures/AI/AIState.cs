@@ -8,6 +8,6 @@ namespace WarInHeven.DataStructures.AI
 {
    public enum AIState
     {
-        EXPAND,FORTIFY
+        EXPAND,FORTIFY,DEGENERATE
     }
 }

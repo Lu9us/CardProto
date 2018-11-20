@@ -152,7 +152,7 @@ namespace WarInHeven
 
         }
 
-        public void MakeNewEmpire(Star planet)
+        public void MakeNewEmpire(Star planet,bool civilWar)
         {
             Empire empire = new Empire();
             empire.parent = planet.empire;
@@ -160,7 +160,25 @@ namespace WarInHeven
             planet.empire.children.Add(empire);
             addList.Add(empire);
             SetPlanetToEmpire(empire, planet);
-            
+
+
+            if (!isNeutral(planet.empire)&&civilWar)
+            {
+                empire.parent.politicalEntries.Add(new PoliticalEntry()
+                {
+                    cause = empire.name + "sceded from " + empire.parent,
+                    causingEmpire = empire,
+                    value = -100
+                });
+                empire.politicalEntries.Add(new PoliticalEntry()
+                {
+                    cause = empire.name + "sceded from " + empire.parent,
+                    causingEmpire = empire.parent,
+                    value = -100
+                });
+                empire.currentPoliticalState.Add(empire.parent, PoliticalState.WAR);
+                empire.parent.currentPoliticalState.Add(empire, PoliticalState.WAR);
+            }
         }
 
         public void Update(object data, DataMap source)

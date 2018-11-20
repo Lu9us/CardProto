@@ -119,6 +119,7 @@ namespace CardProto
             s.Reset();
 
             gs.dataManager.getCurrentMap().AddData("input:keyboard", Keyboard.GetState().GetPressedKeys());
+            gs.dataManager.getCurrentMap().AddData("input:mouse", Mouse.GetState());
             int overallSize = 0;
             int size = 0;
             if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Escape))

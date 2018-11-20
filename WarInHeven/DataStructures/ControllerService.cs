@@ -88,16 +88,7 @@ namespace WarInHeven.DataStructures
                 
                 MouseState md = (MouseState)data;
                 Vector2 mp = gs.camera.mouseToWorld(new Microsoft.Xna.Framework.Vector2(md.X, md.Y));
-                foreach (Star s in world.list)
-                {
-                    if (new Rectangle(s.position.ToPoint(), new Point((int)(100*gs.camera.zoom))).Contains(mp))
-                    {
-                        starData[0].Update(s.name);
-                        starData[1].Update(world.empires.First(a => a.planets.Contains(s)).name);
-                     
-                    }
-
-                }
+              
                 if (lastState != null)
                 {
                     if (md.ScrollWheelValue > lastState.ScrollWheelValue)

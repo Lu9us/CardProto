@@ -26,36 +26,54 @@ namespace WarInHeven.DataStructures.AI
         {
             StarMap starMap=gs.varTable.GetItem<StarMap>("world");
             Empire neutral = starMap.empires.First(a => starMap.isNeutral(a));
-            if (AIState == AIState.EXPAND)
+            if (AIState != AIState.DEGENERATE)
             {
-                Star choice = empire.planets[RandomHelper.getRandomInt(0, empire.planets.Count)];
-                if (empire.fleets.Count < 1 || empire.fleets.Count < openOrders.Count(a=>!a.beingDone)/2)
+                if (AIState == AIState.EXPAND)
                 {
-                    starMap.MakeNewFleet(empire, empire.planets[0]);
-                }
-                foreach (Star planet in choice.neigbours)
-                {
-                    if (planet != null)
+                    Star choice = empire.planets[RandomHelper.getRandomInt(0, empire.planets.Count)];
+                    if (empire.fleets.Count < 1 || empire.fleets.Count < openOrders.Count(a => !a.beingDone) / 2)
                     {
-                        if (planet.empire == neutral)
+                        starMap.MakeNewFleet(empire, empire.planets[0]);
+                    }
+                    foreach (Star planet in choice.neigbours)
+                    {
+                        if (planet != null)
                         {
-                            Order order = new Orders.Order { target = planet, type = Orders.OrderType.MoveTo, Priority = 10};
-                            if (!openOrders.
-                                Any(a => a.target == order.target 
-                                && a.type == order.type)
-                                && !impossibleOrders.Any(a => a.target == order.target 
-                                && a.type == order.type
-                                )
-                                )
-                            { 
-                                openOrders.Add(order);
+                            if (planet.empire == neutral)
+                            {
+                                Order order = new Orders.Order { target = planet, type = Orders.OrderType.MoveTo, Priority = 25 };
+                                if (!openOrders.
+                                    Any(a => a.target == order.target
+                                    && a.type == order.type)
+                                    && !impossibleOrders.Any(a => a.target == order.target
+                                    && a.type == order.type
+                                    )
+                                    )
+                                {
+                                    openOrders.Add(order);
+                                }
+                                break;
                             }
-                            break;
+                        }
+                    }
+                }
+
+                foreach (Star star in empire.planets)
+                {
+                    if (star.resistance > 15)
+                    {
+
+                        if (!openOrders.Any(order => order.target == star && order.type == OrderType.MoveTo)){
+                            Order order = new Orders.Order { target = star, type = Orders.OrderType.MoveTo, Priority = (int)star.resistance };
+                            openOrders.Add(order);
+                        }
+                        else
+                        {
+                            openOrders.FirstOrDefault(order => order.target == star && order.type == OrderType.MoveTo).Priority = (int)star.resistance;
                         }
                     }
                 }
             }
-         
         }
     }
 }

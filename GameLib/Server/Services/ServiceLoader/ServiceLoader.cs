@@ -1,4 +1,5 @@
-﻿using GameLib.DataStructures.Interface;
+﻿using GameLib.Client.UI.Clickable;
+using GameLib.DataStructures.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,7 +46,7 @@ namespace GameLib.Server.Services.ServiceLoader
                     ServiceController.StartNewService(service);
                 }
             }
-
+            ServiceController.StartNewService(new ClickableService());
         }
 
 
@@ -53,6 +54,7 @@ namespace GameLib.Server.Services.ServiceLoader
         public static void ModuleHook()
         {
             System.Console.WriteLine("Begining module Hook");
+            System.Console.WriteLine(Environment.CurrentDirectory);
             foreach (string s in File.ReadLines(MODULE_FILE))
             {
                 System.Console.WriteLine("Module file path: "+s);

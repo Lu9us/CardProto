@@ -22,7 +22,18 @@ namespace WarInHeven
         public List<Star> planets = new List<Star>();
         public bool active = true;
         public List<Fleet> fleets = new List<Fleet>();
+        public List<PoliticalEntry> politicalEntries = new List<PoliticalEntry>();
+        public Dictionary<Empire, PoliticalState> currentPoliticalState = new Dictionary<Empire, PoliticalState>();
 
+        public int freindshipWithEmpire(Empire empire)
+        {
+            int view = 0;
+            foreach (PoliticalEntry entry in politicalEntries.Where((arg) => arg.causingEmpire.ID == empire.ID))
+            {
+                view += entry.value;
+            }
+            return view;
+        }
 
         public Empire()
         {
@@ -44,6 +55,7 @@ namespace WarInHeven
             foreach (Star star in planets)
             {
                 money += star.baseWealthRate * (star.population / 2);
+               
             }
         }
     }

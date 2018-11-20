@@ -17,11 +17,11 @@ namespace WarInHeven.DataStructures.AI
     public class FleetController : IController
     {
         private static Dictionary<FleetController, List<Label>> aiDebugPanel = new Dictionary<FleetController, List<Label>>();
-        public Fleet fleet = new Fleet();
+        public Fleet fleet;
         private Order currentOrder;
         public static bool AiDebug = false;
         IPathFinder pathFinder = new AStarPathFinder(Star.Sort);
-        List<PathFindingNode> currentPath = new List<PathFindingNode>();
+        List<PathFindingNode> currentPath;
         public bool busy = false;
 
         public FleetController(Fleet f)
@@ -42,10 +42,13 @@ namespace WarInHeven.DataStructures.AI
         public void AIDebug()
         {
             
-            String currentPath = "current path: ";
-            foreach (PathFindingNode s in this.currentPath)
+            String currentPathString = "current path: ";
+            if (currentPath != null)
             {
-                currentPath += ((Star)s).name + " " + ((Star)s).position;
+                foreach (PathFindingNode s in this.currentPath)
+                {
+                    currentPathString += ((Star)s).name + " " + ((Star)s).position;
+                }
             }
             if (AiDebug)
             {
@@ -53,7 +56,7 @@ namespace WarInHeven.DataStructures.AI
                 {
                     aiDebugPanel[this][0].Update(((Star)currentOrder.target).name + " " + ((Star)currentOrder.target).position);
                 }
-                aiDebugPanel[this][1].Update(currentPath);
+                aiDebugPanel[this][1].Update(currentPathString);
                 aiDebugPanel[this][2].Update(((AIEmpireController)fleet.owner.controller).openOrders.Count.ToString());
                 aiDebugPanel[this][3].Update(fleet.position.name + " " + fleet.position.position);
             }
@@ -75,18 +78,11 @@ namespace WarInHeven.DataStructures.AI
             StarMap starMap = gs.varTable.GetItem<StarMap>("world");
             if (currentOrder == null)
             {
-                List<Order> orderedOrders = new List<Order>(((AIEmpireController)fleet.owner.controller).openOrders);
-                try
-                {
-                    orderedOrders.Sort((v2, v1) => (Vector2.Distance(v1.target.getLocation().position, fleet.position.position) - v1.Priority).CompareTo(Vector2.Distance(v2.target.getLocation().position, fleet.position.position)) - v2.Priority);
-                    orderedOrders.Reverse();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.StackTrace);
+               List<Order> orderedOrders = new List<Order>(((AIEmpireController)fleet.owner.controller).openOrders);
+           
                     orderedOrders.Sort((v1, v2) => v1.Priority.CompareTo(v2.Priority));
                     orderedOrders.Reverse();
-                }
+              
 
                 foreach (Order order in orderedOrders)
                 {
@@ -102,7 +98,7 @@ namespace WarInHeven.DataStructures.AI
 
             if (currentOrder != null)
             {
-                if (currentPath == null||currentPath.Count < 1)
+                if (currentPath == null)
                 {
                     PathFindingResult result = pathFinder.PathFindFromCurrentPosition(fleet.position, (Star)currentOrder.target);
 
@@ -117,6 +113,8 @@ namespace WarInHeven.DataStructures.AI
                         ((AIEmpireController)fleet.owner.controller).openOrders.Remove(currentOrder);
                         ((AIEmpireController)fleet.owner.controller).impossibleOrders.Add(currentOrder);
                         currentOrder = null;
+                        currentPath = null;
+                        busy = false;
 
                     }
                 }
@@ -129,19 +127,27 @@ namespace WarInHeven.DataStructures.AI
                     {
                         if (currentPath.Count > 0)
                         {
-                            fleet.position = (Star)currentPath[0];
-                            currentPath.Remove(fleet.position);
+                            if (currentPath[0] != null)
+                            {
+                                fleet.position = (Star)currentPath[0];
+                                currentPath.Remove(fleet.position);
+                            }
                         }
                         if (currentPath.Count == 0 || fleet.position.id == ((Star)currentOrder.target).id)
                         {
                             busy = false;
                             currentOrder = null;
+                            currentPath = null;
 
                             ((AIEmpireController)fleet.owner.controller).openOrders.Remove(currentOrder);
 
                             if (starMap.isNeutral(fleet.position.empire))
                             {
                                 starMap.SetPlanetToEmpire(fleet.owner, fleet.position);
+                            }
+                            else if(fleet.position.empire == fleet.owner)
+                            {
+                                fleet.position.resistance += -60;
                             }
                         }
                     }
