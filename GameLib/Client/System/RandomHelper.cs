@@ -8,7 +8,7 @@ namespace GameLib.Client.System
 {
   public static class RandomHelper
     {
-        private static Random r = new Random();
+        private static Random r = new Random(Guid.NewGuid().GetHashCode());
 
         public static int getRandomInt(int min = 0, int max = 1)
         {

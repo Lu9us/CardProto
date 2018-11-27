@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace WarInHeven.DataStructures.AI
 {
-   public enum AIState
+   public enum AIEmpireState
     {
         EXPAND,FORTIFY,DEGENERATE
+    }
+    public enum Personality
+    {
+        
     }
 }

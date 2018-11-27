@@ -39,6 +39,7 @@ namespace WarInHeven
         {
             name = ID.ToString();
             color = GraphicsHelper.getRandomColor();
+            money = 40;
         }
 
         public bool isCapital(Star star)

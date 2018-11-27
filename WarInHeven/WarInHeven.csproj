@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataStructures\AI\AIEmpireController.cs" />
-    <Compile Include="DataStructures\AI\AIState.cs" />
+    <Compile Include="DataStructures\AI\AIEmpireState.cs" />
     <Compile Include="DataStructures\AI\AITarget.cs" />
     <Compile Include="DataStructures\AI\FleetController.cs" />
     <Compile Include="DataStructures\AI\NeutralEmpireController.cs" />

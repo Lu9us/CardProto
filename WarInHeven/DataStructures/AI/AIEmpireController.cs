@@ -13,7 +13,7 @@ namespace WarInHeven.DataStructures.AI
     public class AIEmpireController : EmpireController
     {
         Empire empire;
-        AIState AIState = AIState.EXPAND;
+        AIEmpireState AIState = AIEmpireState.EXPAND;
         public AIEmpireController(Empire empire) : base(empire)
         {
             this.empire = empire;
@@ -26,14 +26,15 @@ namespace WarInHeven.DataStructures.AI
         {
             StarMap starMap=gs.varTable.GetItem<StarMap>("world");
             Empire neutral = starMap.empires.First(a => starMap.isNeutral(a));
-            if (AIState != AIState.DEGENERATE)
+            if (AIState != AIEmpireState.DEGENERATE)
             {
-                if (AIState == AIState.EXPAND)
+                if (AIState == AIEmpireState.EXPAND)
                 {
                     Star choice = empire.planets[RandomHelper.getRandomInt(0, empire.planets.Count)];
-                    if (empire.fleets.Count < 1 || empire.fleets.Count < openOrders.Count(a => !a.beingDone) / 2)
+                    if ((empire.fleets.Count < 1 || empire.fleets.Count < openOrders.Count(a => !a.beingDone) / 2)&& empire.money > 40)
                     {
                         starMap.MakeNewFleet(empire, empire.planets[0]);
+                        empire.money -= 40;
                     }
                     foreach (Star planet in choice.neigbours)
                     {

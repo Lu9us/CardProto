@@ -1,4 +1,5 @@
-﻿using GameLib.Client.System;
+﻿using GameLib.AI.Language;
+using GameLib.Client.System;
 using GameLib.Client.System.GraphicsHandlers;
 using GameLib.DataStructures.Interface;
 using GameLib.Server;
@@ -13,6 +14,7 @@ using WarInHeven.DataStructures.AI;
 using WarInHeven.DataStructures.GameData;
 using WarInHeven.DataStructures.Rendering;
 
+
 namespace WarInHeven
 {
     public class StarMap : IService, DataInterface
@@ -23,6 +25,7 @@ namespace WarInHeven
      public List<Empire> addList = new List<Empire>();
      public List<Star> list = new List<Star>();
      public List<Empire> empires = new List<Empire>();
+     public NameGenerator nameGenerator = new NameGenerator();
         public List<Fleet> fleets = new List<Fleet>();
         long lastRuntime = 0;
         public void OnClose()
@@ -48,11 +51,12 @@ namespace WarInHeven
             e.color = Color.Black;
             e.controller = new NeutralEmpireController(e);
             empires.Add(e);
+
         
             for (int i = 0; i < 1000; i++)
             {
                 Star star = new Star();
-                star.name = star.id.ToString();
+                star.name = nameGenerator.generateName(5);
                 star.position = new Microsoft.Xna.Framework.Vector2(RandomHelper.getRandomInt(0,10000),RandomHelper.getRandomInt(0,10000));
                 star.color = e.color;
                 star.neigbours = new Star[RandomHelper.getRandomInt(2, 9)];
@@ -134,7 +138,7 @@ namespace WarInHeven
         public void MakeNewFleet(Empire e, Star planet)
         {
             Fleet f = new Fleet();
-            f.name = "fleet";
+            f.name = nameGenerator.generateName(5);
             f.owner = e;
             e.fleets.Add(f);
             f.position = planet;
@@ -155,6 +159,7 @@ namespace WarInHeven
         public void MakeNewEmpire(Star planet,bool civilWar)
         {
             Empire empire = new Empire();
+            empire.name = nameGenerator.generateName(5);
             empire.parent = planet.empire;
             empire.controller = new AIEmpireController(empire);
             planet.empire.children.Add(empire);
