@@ -6,7 +6,7 @@ namespace GameLib.AI.Language
 {
     public class NameGenerator
     {
-        public string[] cylibleStructers = {"vcv","v","v'cve","cvv","'s","" };
+        public string[] cylibleStructers = {"vcv","v","v'cve","cvv","vc's","av","quv" };
 
         public string generateName(int length,String [] templateStructs = null){
 

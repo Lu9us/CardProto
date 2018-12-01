@@ -2,6 +2,7 @@
 using GameLib.Client.System;
 using GameLib.Client.System.GraphicsHandlers;
 using GameLib.DataStructures.Interface;
+using GameLib.EventSystem;
 using GameLib.Server;
 using Microsoft.Xna.Framework;
 using System;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Util;
 using WarInHeven.DataStructures.AI;
+using WarInHeven.DataStructures.Events;
 using WarInHeven.DataStructures.GameData;
 using WarInHeven.DataStructures.Rendering;
 
@@ -25,8 +27,10 @@ namespace WarInHeven
      public List<Empire> addList = new List<Empire>();
      public List<Star> list = new List<Star>();
      public List<Empire> empires = new List<Empire>();
-     public NameGenerator nameGenerator = new NameGenerator();
+        public NameGenerator nameGenerator = new NameGenerator();
+        public EventBus eventBus = new EventBus();
         public List<Fleet> fleets = new List<Fleet>();
+        private EventLog eventLog = new EventLog();
         long lastRuntime = 0;
         public void OnClose()
         {
@@ -44,6 +48,7 @@ namespace WarInHeven
         public void OnStart(GameState s)
         {
             gs = s;
+            Event.eventBus = eventBus;
             gs.camera.zoom = 0.3f;
             gs.camera.pos = new Microsoft.Xna.Framework.Vector2(500, 500);
             Empire e = new Empire();
@@ -51,6 +56,7 @@ namespace WarInHeven
             e.color = Color.Black;
             e.controller = new NeutralEmpireController(e);
             empires.Add(e);
+         
 
         
             for (int i = 0; i < 1000; i++)
@@ -90,6 +96,11 @@ namespace WarInHeven
             StarRendering starRendering = new StarRendering(s,list);
             FleetRendering fleetRendering = new FleetRendering(this);
             gs.varTable.AddItem("world", this);
+        }
+
+        public GameState getGameState()
+        {
+            return gs;
         }
 
         public void OnUpdate()
@@ -132,7 +143,7 @@ namespace WarInHeven
                     empires.Remove(e);
                 }
                 deleteList.Clear();
-            
+            eventLog.update(eventBus); 
         }
 
         public void MakeNewFleet(Empire e, Star planet)
@@ -144,6 +155,7 @@ namespace WarInHeven
             f.position = planet;
             fleets.Add(f);
             f.controller = new FleetController(f);
+            new EmpireEvent(e, e.name + " has created fleet " + f.name, gs.runtime);
             }
 
         public void SetPlanetToEmpire(Empire empire, Star planet)
@@ -153,6 +165,7 @@ namespace WarInHeven
             planet.color = empire.color;
             planet.empire = empire;
             empire.planets.Add(planet);
+            new EmpireEvent(empire, empire.name + " has occupied " + planet.name, gs.runtime);
 
         }
 
@@ -160,6 +173,7 @@ namespace WarInHeven
         {
             Empire empire = new Empire();
             empire.name = nameGenerator.generateName(5);
+            new EmpireEvent(empire, empire.name + " has been founded on planet " + planet.name,gs.runtime);
             empire.parent = planet.empire;
             empire.controller = new AIEmpireController(empire);
             planet.empire.children.Add(empire);
@@ -169,20 +183,20 @@ namespace WarInHeven
 
             if (!isNeutral(planet.empire)&&civilWar)
             {
-                empire.parent.politicalEntries.Add(new PoliticalEntry()
+                empire.pushPoliticalEntry(new PoliticalEntry()
                 {
                     cause = empire.name + "sceded from " + empire.parent,
                     causingEmpire = empire,
                     value = -100
                 });
-                empire.politicalEntries.Add(new PoliticalEntry()
+                empire.pushPoliticalEntry(new PoliticalEntry()
                 {
                     cause = empire.name + "sceded from " + empire.parent,
                     causingEmpire = empire.parent,
                     value = -100
                 });
-                empire.currentPoliticalState.Add(empire.parent, PoliticalState.WAR);
-                empire.parent.currentPoliticalState.Add(empire, PoliticalState.WAR);
+                empire.changePoliticalState(empire.parent, PoliticalState.WAR);
+                empire.parent.changePoliticalState(empire, PoliticalState.WAR);
             }
         }
 

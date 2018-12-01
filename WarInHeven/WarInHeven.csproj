@@ -61,6 +61,8 @@
     <Compile Include="DataStructures\Rendering\StarRendering.cs" />
     <Compile Include="DataStructures\GameData\PoliticalEntry.cs" />
     <Compile Include="DataStructures\UI\InfoPanel.cs" />
+    <Compile Include="DataStructures\Events\Events.cs" />
+    <Compile Include="DataStructures\Events\EventLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameLib\GameLib.csproj">
@@ -75,6 +77,7 @@
   <ItemGroup>
     <Folder Include="DataStructures\AI\PathFinding\" />
     <Folder Include="DataStructures\UI\" />
+    <Folder Include="DataStructures\Events\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

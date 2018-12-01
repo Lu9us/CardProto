@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WarInHeven.DataStructures.AI;
+using WarInHeven.DataStructures.GameData;
 using WarInHeven.DataStructures.UI;
 
 namespace WarInHeven
@@ -58,15 +59,33 @@ namespace WarInHeven
                     
                     if (inferstructure < 2)
                     {
-                        resistance+=5;
+                        resistance+=1;
                     }
                     if (resistance > 50)
                     {
-                        if (RandomHelper.getRandomInt(max: 50) > 90)
+                        if (RandomHelper.getRandomInt(max: 50)+resistance > 120)
                         {
                             map.MakeNewEmpire(this, true);
                             resistance = 0;
                         }
+                    }
+                }
+            }
+
+            foreach(Star s in neigbours)
+            {
+                if(!map.isNeutral(s.empire)&&s.empire != empire)
+                {
+                  int score = RandomHelper.getRandomInt(1, 20);
+
+                    if(score > 15)
+                    {
+                        PoliticalEntry politicalEntry = new PoliticalEntry();
+                        politicalEntry.cause = "border tension";
+                        politicalEntry.value = -5;
+                        politicalEntry.causingEmpire = s.empire;
+                        empire.pushPoliticalEntry(politicalEntry);
+                        
                     }
                 }
             }

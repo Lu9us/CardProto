@@ -41,7 +41,7 @@ namespace WarInHeven.DataStructures.AI
 
         public void AIDebug()
         {
-            
+
             String currentPathString = "current path: ";
             if (currentPath != null)
             {
@@ -78,11 +78,11 @@ namespace WarInHeven.DataStructures.AI
             StarMap starMap = gs.varTable.GetItem<StarMap>("world");
             if (currentOrder == null)
             {
-               List<Order> orderedOrders = new List<Order>(((AIEmpireController)fleet.owner.controller).openOrders);
-           
-                    orderedOrders.Sort((v1, v2) => v1.Priority.CompareTo(v2.Priority));
-                    orderedOrders.Reverse();
-              
+                List<Order> orderedOrders = new List<Order>(((AIEmpireController)fleet.owner.controller).openOrders);
+
+                orderedOrders.Sort((v1, v2) => v1.Priority.CompareTo(v2.Priority));
+
+
 
                 foreach (Order order in orderedOrders)
                 {
@@ -98,6 +98,13 @@ namespace WarInHeven.DataStructures.AI
 
             if (currentOrder != null)
             {
+                if (!((AIEmpireController)fleet.owner.controller).openOrders.Contains(this.currentOrder))
+                {
+                    busy = false;
+                    currentPath = null;
+                    currentOrder = null;
+                    return;
+                }
                 if (currentPath == null)
                 {
                     PathFindingResult result = pathFinder.PathFindFromCurrentPosition(fleet.position, (Star)currentOrder.target);
@@ -125,12 +132,17 @@ namespace WarInHeven.DataStructures.AI
                 {
                     try
                     {
+
                         if (currentPath.Count > 0)
                         {
                             if (currentPath[0] != null)
                             {
                                 fleet.position = (Star)currentPath[0];
                                 currentPath.Remove(fleet.position);
+                                if (fleet.position.empire == fleet.owner)
+                                {
+                                    fleet.position.resistance += -60;
+                                }
                             }
                         }
                         if (currentPath.Count == 0 || fleet.position.id == ((Star)currentOrder.target).id)
@@ -145,10 +157,7 @@ namespace WarInHeven.DataStructures.AI
                             {
                                 starMap.SetPlanetToEmpire(fleet.owner, fleet.position);
                             }
-                            else if(fleet.position.empire == fleet.owner)
-                            {
-                                fleet.position.resistance += -60;
-                            }
+
                         }
                     }
                     catch (Exception e)
@@ -157,7 +166,7 @@ namespace WarInHeven.DataStructures.AI
                     }
                 }
             }
-            
+
             AIDebug();
         }
     }

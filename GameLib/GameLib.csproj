@@ -102,11 +102,14 @@
     <Compile Include="Client\UI\Clickable\IClickable.cs" />
     <Compile Include="Client\UI\Clickable\ClickableService.cs" />
     <Compile Include="AI\Language\NameGenerator.cs" />
+    <Compile Include="EventSystem\Event.cs" />
+    <Compile Include="EventSystem\EventBus.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Unified\Services\MapService\Chunk\" />
     <Folder Include="Client\UI\Clickable\" />
     <Folder Include="AI\Language\" />
+    <Folder Include="EventSystem\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Util\Util.csproj">

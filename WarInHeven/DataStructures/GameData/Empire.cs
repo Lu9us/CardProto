@@ -1,10 +1,12 @@
 ﻿using GameLib.Client.System.GraphicsHandlers;
+using GameLib.EventSystem;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WarInHeven.DataStructures.Events;
 using WarInHeven.DataStructures.GameData;
 using WarInHeven.DataStructures.Interfaces;
 
@@ -22,7 +24,7 @@ namespace WarInHeven
         public List<Star> planets = new List<Star>();
         public bool active = true;
         public List<Fleet> fleets = new List<Fleet>();
-        public List<PoliticalEntry> politicalEntries = new List<PoliticalEntry>();
+        private List<PoliticalEntry> politicalEntries = new List<PoliticalEntry>();
         public Dictionary<Empire, PoliticalState> currentPoliticalState = new Dictionary<Empire, PoliticalState>();
 
         public int freindshipWithEmpire(Empire empire)
@@ -44,7 +46,7 @@ namespace WarInHeven
 
         public bool isCapital(Star star)
         {
-            if(planets.Count > 0)
+            if (planets.Count > 0)
             {
                 return planets[0].id == star.id;
             }
@@ -56,8 +58,27 @@ namespace WarInHeven
             foreach (Star star in planets)
             {
                 money += star.baseWealthRate * (star.population / 2);
-               
+
+            }
+        }
+
+        public void pushPoliticalEntry(PoliticalEntry e)
+        {
+            
+            this.politicalEntries.Add(e);
+        }
+        public void changePoliticalState(Empire empire, PoliticalState state)
+        {
+            new EmpireEvent(this, empire.name + "has changed political state to" +state.ToString().ToLower()+" "+ this.name,-1);
+            if(currentPoliticalState.ContainsKey(empire))
+            {
+                currentPoliticalState[empire] = state;  
+            }
+            else
+            {
+                currentPoliticalState.Add(empire, state);
             }
         }
     }
+   
 }
